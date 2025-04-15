@@ -27,13 +27,13 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="nav navbar-nav justify-content-center">
 					<li class="nav-item">
-						<a class="nav-link" href="#section1">S1</a>
+						<a class="nav-link" href="#section1">Section 1</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#section2">S2</a>
+						<a class="nav-link" href="#section2">Section 2</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#section3">S3</a>
+						<a class="nav-link" href="#section3">Section 3</a>
 					</li>
 				</ul>
 			</div>
@@ -80,6 +80,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		const logoContainer = document.getElementById("logo-container");
 		const logo = document.getElementsByTagName("svg")[0];
 		const paths = [...logo.getElementsByTagName("path")];
+		const G = logo.getElementById("G");
 		const G_stroke = logo.getElementById("G-stroke");
 		const G_fill = logo.getElementById("G-fill");
 		const G_nerves = logo.getElementById("G-nerves");
@@ -120,6 +121,18 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 					opacity: [0, 1],
 					duration: 1000,
 					delay: 2000 + letters.length * 200 + 1000,
+					onComplete: () => {
+						[G, ...letters].forEach((letter, i) => {
+							animate(letter, {
+							translateY: [0, -5, 0],
+							loop: true,
+							ease: 'inOutSine',
+							delay: i * 100,
+							duration: 3000
+						});
+						});
+						
+					},
 				});
 			});
 
@@ -138,8 +151,8 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 
 		path {
 			stroke-linecap: butt;
-			stroke:#F8ECE1 !important;
-			filter:drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.2));
+			stroke: #f8ece1 !important;
+			filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.2));
 		}
 	}
 </style>
@@ -149,7 +162,8 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		text-decoration: none;
 	}
 	#nav-logo {
-		height: 60px;
+		height: 50px;
+		max-height: 80%;
 		margin-left: 10px;
 	}
 	#header {
@@ -197,16 +211,21 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 	.nav-link {
 		transition: all 0.2s ease;
 		transform-origin: left;
+		color: #7f7f7f;
+		font-size: larger;
+		font-weight: 600;
 		&.active {
-			transform: scale(2);
+			transform: scale(1.4);
+			color: #ef857d !important;
 		}
 	}
 	#menu {
 		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 	}
 	.navbar-brand {
-		padding-right: 2em;
+		padding-right: 0;
 		font-size: 2em;
+		transform: translatey(-10%);
 	}
 	#header-center {
 		height: 100%;
@@ -227,7 +246,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		height: auto;
 		background-color: rgba(200, 200, 200, 0.1);
 		backdrop-filter: blur(6px);
-		border: 3px solid #F8ECE1;
+		border: 3px solid white;
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 		border-radius: 999px;
 		cursor: pointer;
@@ -240,7 +259,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		&:hover {
 			background-color: rgba(200, 200, 200, 0.5);
 			box-shadow:
-				0 0 10px #F8ECE1,
+				0 0 10px #f8ece1,
 				0 0 40px rgba(0, 0, 0, 0.3);
 			transform: scale(1.05);
 		}
@@ -259,7 +278,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		height: 0;
 		border-left: 40px solid transparent;
 		border-right: 40px solid transparent;
-		border-bottom: 40px solid #F8ECE1;
+		border-bottom: 40px solid white;
 	}
 
 	@media (min-width: 768px) {

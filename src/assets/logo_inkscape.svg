@@ -453,9 +453,9 @@
        style="font-size:74.6667px;line-height:1.25;font-family:'Albertus Nova';-inkscape-font-specification:'Albertus Nova';white-space:pre;shape-inside:url(#rect1920-1);display:inline"><tspan
          x="326.39258"
          y="496.03004"
-         id="tspan16502"><tspan
+         id="tspan16883"><tspan
            style="font-family:Sacramento;-inkscape-font-specification:Sacramento"
-           id="tspan16500">REENLEAF</tspan></tspan></text>
+           id="tspan16881">REENLEAF</tspan></tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-29.930737,-121.11315)"
@@ -463,9 +463,9 @@
        style="font-size:74.6667px;line-height:1.25;font-family:'Albertus Nova';-inkscape-font-specification:'Albertus Nova';white-space:pre;shape-inside:url(#rect1920-1-2);display:inline"><tspan
          x="326.39258"
          y="496.03004"
-         id="tspan16506"><tspan
+         id="tspan16887"><tspan
            style="font-family:borel;-inkscape-font-specification:borel"
-           id="tspan16504">reenleaf</tspan></tspan></text>
+           id="tspan16885">reenleaf</tspan></tspan></text>
     <path
        style="font-variation-settings:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.965;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000"
        d="M 3.968753,230.1875 V 209.02083 H 7.9375 c 5.29167,1e-5 6.61459,3.53112 6.61459,5.82084 0,2.91042 -1.32292,6.08541 -6.61459,6.08541 l 6.61459,9.26042"
@@ -554,7 +554,10 @@
            d="m 76.901116,102.61077 c -5.555005,-9.276968 -18.378238,-9.173493 -25.943431,-1.19464 -1.704825,1.79804 -8.712436,-0.15241 -9.10612,10.09282 5.966858,1.75516 7.941376,-5.56592 6.467423,-2.59734 -3.777281,7.60755 0.589258,23.22024 14.801736,22.53394 11.037555,-0.53299 13.115687,-8.38978 19.48083,-10.91255 -2.570662,-5.86931 -6.973114,-8.08966 -12.821992,-6.74466 -8.747918,2.01167 -9.830418,9.42993 -15.220424,7.24901"
            id="path236"
            sodipodi:nodetypes="cscsscsc"
-           inkscape:label="linea" />
+           inkscape:label="linea"
+           inkscape:export-filename="logo.svg"
+           inkscape:export-xdpi="400"
+           inkscape:export-ydpi="400" />
       </g>
       <path
          style="font-variation-settings:normal;opacity:1;fill:none;fill-opacity:1;stroke:#7f7f7f;stroke-width:2.965;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
