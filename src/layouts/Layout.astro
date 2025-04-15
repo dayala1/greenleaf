@@ -1,0 +1,30 @@
+---
+import '../styles/bootstrap.min.css';
+import '../styles/global.css'
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro Basics</title>
+	</head>
+	<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-offset="0">
+		<slot />
+	</body>
+</html>
+
+<style>
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
+</style>
+
+<script>
+	import '../scripts/bootstrap.bundle.min.js';
+</script>

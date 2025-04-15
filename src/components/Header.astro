@@ -1,0 +1,150 @@
+---
+import headerVideo from "../assets/header_video.webm";
+let grey = "#f8f9fa";
+---
+
+<div id="header">
+	<nav
+		id="menu"
+		class="navbar fixed-top navbar-expand-md justify-content-center"
+	>
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">Greenleaf</a>
+			<button
+				class="navbar-toggler"
+				type="button"
+				data-bs-toggle="collapse"
+				data-bs-target="#navbarNav"
+				aria-controls="navbarNav"
+				aria-expanded="false"
+				aria-label="Toggle navigation"
+			>
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="nav navbar-nav justify-content-center">
+					<li class="nav-item">
+						<a class="nav-link" href="#section1">S1</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#section2">S2</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#section3">S3</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<a href="#section1"
+		><div id="scroll-button"><span id="triangle"></span></div></a
+	>
+	<video id="video" autoplay loop muted src={headerVideo}> </video>
+</div>
+
+<style>
+	#header {
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100vh;
+		position: relative;
+		box-shadow: 0 0 100px rgba(0, 0, 0, 0.6) inset;
+	}
+	#video {
+		position: absolute;
+		width: 100%;
+		height: auto;
+		object-fit: cover;
+		object-position: top;
+		top: 0;
+		left: 0;
+		z-index: -1;
+	}
+	#video-space {
+		height: 100vh;
+		position: relative;
+	}
+	nav {
+		background-color: rgba(255, 255, 255, 0.5);
+		backdrop-filter: blur(10px);
+	}
+	.nav-item {
+		background-color: rgba(255, 255, 255, 0);
+		margin: 1em;
+	}
+	.nav-link {
+		transition: all 0.2s ease;
+		transform-origin: left;
+		&.active {
+			transform: scale(2);
+		}
+	}
+	#menu {
+		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+	}
+	.navbar-brand {
+		padding-right: 2em;
+		font-size: 2em;
+	}
+
+	#scroll-button {
+		display: none;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
+		width: 150px;
+		height: 150px;
+		background-color: rgba(200, 200, 200, 0.1);
+		backdrop-filter: blur(6px);
+		border: 3px solid white;
+		box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+		border-radius: 50%;
+		cursor: pointer;
+		transition: all 0.3s ease;
+
+		&:hover {
+			background-color: rgba(200, 200, 200, 0.5);
+			box-shadow:
+				0 0 10px white,
+				0 0 40px rgba(0, 0, 0, 0.3);
+			transform: translateX(-50%) translateY(-50%) scale(1.05);
+		}
+	}
+	#triangle {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-35%) rotate(180deg);
+		width: 0;
+		height: 0;
+		border-left: 40px solid transparent;
+		border-right: 40px solid transparent;
+		border-bottom: 40px solid white;
+	}
+
+	@media (min-width: 768px) {
+		/* Video becomes 100% height in desktop */
+		#video {
+			height: 100vh;
+			position: absolute;
+		}
+		nav {
+			height: 5em;
+		}
+		#scroll-button {
+			display: block;
+		}
+		#navbarNav {
+			flex-grow: 0;
+		}
+		.container-fluid {
+			width: 100%;
+			justify-content: center !important;
+		}
+		.nav-link {
+			transform-origin: center;
+		}
+	}
+</style>
