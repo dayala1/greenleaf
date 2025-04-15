@@ -1,0 +1,112 @@
+---
+import Layout from "../layouts/Layout.astro";
+import escena from "../assets/escena.glb";
+console.log(escena);
+---
+
+<Layout>
+	<div id="three-container" style="width: 100vw; height: 100vh;"></div>
+</Layout>
+<script>
+	import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+	import * as THREE from "three";
+	// on ready
+	document.addEventListener("DOMContentLoaded", () => {
+		// Scene setup
+		const container = document.getElementById("three-container");
+		const scene = new THREE.Scene();
+		const renderer = new THREE.WebGLRenderer({ antialias: true });
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		renderer.setPixelRatio(window.devicePixelRatio);
+		container.appendChild(renderer.domElement);
+
+		// Load GLTF model
+		const loader = new GLTFLoader();
+		let camera; // Placeholder for the included cameralet 
+		 
+		let initialCameraPosition = { x: 0, y: 0, z: 0 }; // To store the initial camera position
+
+		loader.load(
+            "/src/assets/escena.glb",
+            (gltf) => {
+                scene.add(gltf.scene);
+
+                // Use the included camera named "Camera"
+                camera = gltf.cameras.find((cam) => cam.name === "Camera");
+                if (camera) {
+                    // Store the initial camera position
+                    initialCameraPosition = {
+                        x: camera.position.x,
+                        y: camera.position.y,
+                        z: camera.position.z,
+                    };
+                } else {
+                    console.error(
+                        'No camera named "Camera" found in the GLTF file.',
+                    );
+                }
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            },
+            (error) => {
+                console.error(
+                    "An error occurred while loading the model:",
+                    error,
+                );
+            },
+        );
+
+		// Handle window resize
+		window.addEventListener("resize", () => {
+			if (camera) {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+			}
+			renderer.setSize(window.innerWidth, window.innerHeight);
+		});
+
+		// Mouse movement effect
+		let mouseX = 0;
+		let mouseY = 0;
+		let targetX = 0;
+		let targetY = 0;
+
+		const windowHalfX = window.innerWidth / 2;
+		const windowHalfY = window.innerHeight / 2;
+		const maxTiltX = 2; // Maximum tilt in the X direction
+        const maxTiltY = 1; // Maximum tilt in the Y direction
+
+		document.addEventListener("mousemove", (event) => {
+			// Normalize mouse position to range [-1, 1]
+            mouseX = (event.clientX - windowHalfX) / windowHalfX;
+            mouseY = (event.clientY - windowHalfY) / windowHalfY;
+
+            // Clamp the values to the maximum tilt range
+            mouseX = Math.max(-1, Math.min(1, mouseX));
+            mouseY = Math.max(-1, Math.min(1, mouseY));
+		});
+
+		// Animation loop
+		const animate = () => {
+			requestAnimationFrame(animate);
+			// Smoothly interpolate camera movement
+            targetX += (mouseX - targetX) * 0.05; // Adjust the interpolation factor for smoothness
+            targetY += (mouseY - targetY) * 0.05;
+
+            if (camera) {
+				camera.position.set(
+                    initialCameraPosition.x,
+                    initialCameraPosition.y,
+                    initialCameraPosition.z
+                );
+                camera.translateX(targetX * maxTiltX); // Move along the local X-axis
+                camera.translateY(targetY * maxTiltY);
+                camera.lookAt(scene.position); // Ensure the camera always looks at the scene
+				renderer.render(scene, camera);
+            }
+
+		};
+		animate();
+	});
+</script>
