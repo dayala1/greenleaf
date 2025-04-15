@@ -1,17 +1,22 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import escena from "../assets/escena.glb";
-console.log(escena);
 ---
 
 <Layout>
-	<div id="three-container" style="width: 100vw; height: 100vh;"></div>
+	<div
+		id="three-container"
+		data-src={escena}
+		style="width: 100vw; height: 100vh;"
+	>
+	</div>
 </Layout>
 <script>
 	import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 	import * as THREE from "three";
 	// on ready
 	document.addEventListener("DOMContentLoaded", () => {
+		const escena = document.getElementById("three-container").dataset.src;
 		// Scene setup
 		const container = document.getElementById("three-container");
 		const scene = new THREE.Scene();
@@ -22,91 +27,127 @@ console.log(escena);
 
 		// Load GLTF model
 		const loader = new GLTFLoader();
-		let camera; // Placeholder for the included cameralet 
-		 
+		let camera; // Placeholder for the included cameralet
+
 		let initialCameraPosition = { x: 0, y: 0, z: 0 }; // To store the initial camera position
 
 		loader.load(
-            "/src/assets/escena.glb",
-            (gltf) => {
-                scene.add(gltf.scene);
+			escena,
+			(gltf) => {
+				scene.add(gltf.scene);
 
-                // Use the included camera named "Camera"
-                camera = gltf.cameras.find((cam) => cam.name === "Camera");
-                if (camera) {
-                    // Store the initial camera position
-                    initialCameraPosition = {
-                        x: camera.position.x,
-                        y: camera.position.y,
-                        z: camera.position.z,
-                    };
-                } else {
-                    console.error(
-                        'No camera named "Camera" found in the GLTF file.',
-                    );
-                }
-            },
-            (xhr) => {
-                console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-            },
-            (error) => {
-                console.error(
-                    "An error occurred while loading the model:",
-                    error,
-                );
-            },
-        );
+				// Use the included camera named "Camera"
+				camera = gltf.cameras.find((cam) => cam.name === "Camera");
+				if (camera) {
+					// Store the initial camera position
+					initialCameraPosition = {
+						x: camera.position.x,
+						y: camera.position.y,
+						z: camera.position.z,
+					};
+					const aspect = window.innerWidth / window.innerHeight;
+
+					// Adjust the orthographic camera's view size while maintaining its aspect ratio
+					const frustumHeight = camera.top - camera.bottom;
+					const frustumWidth = frustumHeight * aspect;
+
+					camera.left = -frustumWidth / 2;
+					camera.right = frustumWidth / 2;
+					camera.top = frustumHeight / 2;
+					camera.bottom = -frustumHeight / 2;
+
+					camera.updateProjectionMatrix();
+				} else {
+					console.error(
+						'No camera named "Camera" found in the GLTF file.',
+					);
+				}
+			},
+			(xhr) => {
+				console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+			},
+			(error) => {
+				console.error(
+					"An error occurred while loading the model:",
+					error,
+				);
+			},
+		);
 
 		// Handle window resize
 		window.addEventListener("resize", () => {
-			if (camera) {
-				camera.aspect = window.innerWidth / window.innerHeight;
+			if (camera && camera.isOrthographicCamera) {
+				const aspect = window.innerWidth / window.innerHeight;
+
+				// Adjust the orthographic camera's view size while maintaining its aspect ratio
+				const frustumHeight = camera.top - camera.bottom;
+				const frustumWidth = frustumHeight * aspect;
+
+				camera.left = -frustumWidth / 2;
+				camera.right = frustumWidth / 2;
+				camera.top = frustumHeight / 2;
+				camera.bottom = -frustumHeight / 2;
+
 				camera.updateProjectionMatrix();
 			}
+
 			renderer.setSize(window.innerWidth, window.innerHeight);
 		});
 
 		// Mouse movement effect
 		let mouseX = 0;
-		let mouseY = 0;
-		let targetX = 0;
-		let targetY = 0;
+        let mouseY = 0;
+        let tiltX = 0;
+        let tiltY = 0;
+        let targetX = 0;
+        let targetY = 0;
 
 		const windowHalfX = window.innerWidth / 2;
 		const windowHalfY = window.innerHeight / 2;
 		const maxTiltX = 2; // Maximum tilt in the X direction
-        const maxTiltY = 1; // Maximum tilt in the Y direction
+		const maxTiltY = 1; // Maximum tilt in the Y direction
 
 		document.addEventListener("mousemove", (event) => {
 			// Normalize mouse position to range [-1, 1]
-            mouseX = (event.clientX - windowHalfX) / windowHalfX;
-            mouseY = (event.clientY - windowHalfY) / windowHalfY;
+			mouseX = (event.clientX - windowHalfX) / windowHalfX;
+			mouseY = (event.clientY - windowHalfY) / windowHalfY;
+
+			// Clamp the values to the maximum tilt range
+			mouseX = Math.max(-1, Math.min(1, mouseX));
+			mouseY = Math.max(-1, Math.min(1, mouseY));
+		});
+
+		window.addEventListener("deviceorientation", (event) => {
+            // Normalize tilt values to range [-1, 1]
+            tiltX = event.gamma / 45; // Gamma is the left-to-right tilt in degrees
+            tiltY = event.beta / 45; // Beta is the front-to-back tilt in degrees
 
             // Clamp the values to the maximum tilt range
-            mouseX = Math.max(-1, Math.min(1, mouseX));
-            mouseY = Math.max(-1, Math.min(1, mouseY));
-		});
+            tiltX = Math.max(-1, Math.min(1, tiltX));
+            tiltY = Math.max(-1, Math.min(1, tiltY));
+        });
 
 		// Animation loop
 		const animate = () => {
-			requestAnimationFrame(animate);
-			// Smoothly interpolate camera movement
-            targetX += (mouseX - targetX) * 0.05; // Adjust the interpolation factor for smoothness
-            targetY += (mouseY - targetY) * 0.05;
+            requestAnimationFrame(animate);
+
+            // Use mouse movement on desktop and tilt on mobile
+            const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+            targetX += ((isMobile ? tiltX : mouseX) - targetX) * 0.05; // Smooth interpolation
+            targetY += ((isMobile ? tiltY : mouseY) - targetY) * 0.05;
 
             if (camera) {
-				camera.position.set(
+                camera.position.set(
                     initialCameraPosition.x,
                     initialCameraPosition.y,
-                    initialCameraPosition.z
+                    initialCameraPosition.z,
                 );
                 camera.translateX(targetX * maxTiltX); // Move along the local X-axis
                 camera.translateY(targetY * maxTiltY);
                 camera.lookAt(scene.position); // Ensure the camera always looks at the scene
-				renderer.render(scene, camera);
+                renderer.render(scene, camera);
             }
-
-		};
+        };
 		animate();
 	});
 </script>
