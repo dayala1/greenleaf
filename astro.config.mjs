@@ -1,12 +1,19 @@
-// @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://dayala1.github.io',
-  base: '/greenleaf',
-  vite: {
-    plugins: [tailwindcss()],
-  },
+	site: "https://dayala1.github.io",
+	base: "/",
+	vite: {
+		plugins: [tailwindcss()],
+	},
+	alias: {
+		"@components": "./src/components",
+		"@scripts": "./src/scripts",
+		"@lib": "./src/lib",
+		"@assets": "./src/assets",
+		"@layouts": "./src/layouts",
+		"@config": "./src/config",
+	},
 });
