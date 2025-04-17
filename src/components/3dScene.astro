@@ -1,0 +1,314 @@
+---
+import escena from "../assets/escena_2.glb";
+---
+
+<div
+	id="three-container"
+	data-src={escena}
+	style="width: 50vw; height: 50vh; border-radius:10px;"
+>
+</div>
+
+<script>
+	import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+	import * as THREE from "three";
+	import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+	import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+	import { BokehPass } from "three/addons/postprocessing/BokehPass.js";
+
+	import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+
+	// Utility class to manage 3D scenes
+	class SceneManager {
+		container: HTMLElement | null;
+		sceneFile: any;
+		scene: any;
+		renderer: any;
+		camera: null;
+		initialCameraPosition: { x: number; y: number; z: number };
+		mouseX: number;
+		mouseY: number;
+		tiltX: number;
+		tiltY: number;
+		targetX: number;
+		targetY: number;
+		maxTiltX: number;
+		maxTiltY: number;
+		postprocessing: {};
+		usePostprocessing: boolean;
+		useAmbientLight: boolean;
+		castShadows: boolean;
+		shadowMapSize: number;
+		mixer: null;
+		clock: any;
+		constructor(containerId, sceneFile) {
+			this.container = document.getElementById(containerId);
+			this.sceneFile = sceneFile;
+			this.scene = new THREE.Scene();
+			this.renderer = new THREE.WebGLRenderer({ antialias: true });
+			this.camera = null;
+			this.initialCameraPosition = { x: 0, y: 0, z: 0 };
+			this.mouseX = 0;
+			this.mouseY = 0;
+			this.tiltX = 0;
+			this.tiltY = 0;
+			this.targetX = 0;
+			this.targetY = 0;
+			this.maxTiltX = 2; // Maximum tilt in the X direction
+			this.maxTiltY = 1; // Maximum tilt in the Y direction
+			this.postprocessing = {};
+			this.usePostprocessing = false; // Enable postprocessing
+			this.useAmbientLight = true; // Enable ambient light
+			this.castShadows = true; // Enable shadows
+			this.shadowMapSize = 1024; // Size of the shadow map
+			this.mixer = null; // Animation mixer
+			this.clock = new THREE.Clock();
+			this.animationDuration = 0; // Duration of the animation in seconds
+			this.animationAction = null;
+		}
+
+		initPostprocessing() {
+			const renderPass = new RenderPass(this.scene, this.camera);
+			const bokehPass = new BokehPass(this.scene, this.camera, {
+				focus: 0.1,
+				aperture: 0.1,
+				maxblur: 0.01,
+			});
+
+			const outputPass = new OutputPass();
+
+			const composer = new EffectComposer(this.renderer);
+
+			composer.addPass(renderPass);
+			composer.addPass(bokehPass);
+			composer.addPass(outputPass);
+
+			this.postprocessing.composer = composer;
+			this.postprocessing.bokeh = bokehPass;
+		}
+
+		// Initialize the renderer and append it to the container
+		initRenderer() {
+			// Wait for the container to have its correct dimensions
+			const containerWidth = this.container.clientWidth;
+			const containerHeight = this.container.clientHeight;
+
+			// Set the renderer size to match the container
+			this.renderer.setSize(containerWidth, containerHeight);
+			this.renderer.setPixelRatio(window.devicePixelRatio);
+			this.renderer.physicallyCorrectLights = true;
+			// Cast shadows
+			if (this.castShadows) {
+				this.renderer.shadowMap.enabled = true;
+				this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+			}
+
+			// Append the renderer to the container
+			this.container.appendChild(this.renderer.domElement);
+		}
+
+		// Load the GLTF model and set up the camera
+		loadScene() {
+			const loader = new GLTFLoader();
+			loader.load(
+				this.sceneFile,
+				(gltf) => {
+					// Animation processing
+					this.mixer = new THREE.AnimationMixer(gltf.scene);
+					this.animationAction = this.mixer.clipAction(
+						gltf.animations[0],
+					);
+					this.animationDuration = gltf.animations[0].duration; // Store animation duration
+					this.animationAction.play();
+					this.scene.add(gltf.scene);
+					// Cast shadows
+					if (this.castShadows) {
+						this.scene.traverse((child) => {
+							if (child.isLight) {
+								child.castShadow = true;
+								child.shadow.normalBias = 1e-2;
+								child.shadow.bias = -1e-3;
+								child.shadow.mapSize.width = this.shadowMapSize;
+								child.shadow.mapSize.height =
+									this.shadowMapSize;
+							}
+							if (child.isMesh) {
+								child.castShadow = true;
+								child.receiveShadow = true;
+							}
+						});
+					}
+					if (this.useAmbientLight) {
+						const ambientLight = new THREE.AmbientLight(
+							0xffffff,
+							1,
+						);
+						this.scene.add(ambientLight);
+					}
+					this.camera = gltf.cameras.find(
+						(cam) => cam.name === "Camera",
+					);
+					if (this.camera) {
+						this.initialCameraPosition = {
+							x: this.camera.position.x,
+							y: this.camera.position.y,
+							z: this.camera.position.z,
+						};
+						this.adjustCameraAspect();
+						if (this.usePostprocessing) {
+							this.initPostprocessing();
+						}
+					} else {
+						console.error(
+							'No camera named "Camera" found in the GLTF file.',
+						);
+					}
+				},
+				(xhr) => {
+					console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+				},
+				(error) => {
+					console.error(
+						"An error occurred while loading the model:",
+						error,
+					);
+				},
+			);
+		}
+
+		// Adjust the camera's aspect ratio for orthographic cameras
+		adjustCameraAspect() {
+			if (this.camera && this.camera.isOrthographicCamera) {
+				const containerWidth = this.container.clientWidth;
+				const containerHeight = this.container.clientHeight;
+				const aspect = containerWidth / containerHeight;
+
+				// Maintain the original frustum height
+				const frustumHeight = this.camera.top - this.camera.bottom;
+
+				// Calculate the new frustum width based on the aspect ratio
+				const frustumWidth = frustumHeight * aspect;
+
+				// Update the camera's frustum dimensions
+				this.camera.left = -frustumWidth / 2;
+				this.camera.right = frustumWidth / 2;
+				this.camera.top = frustumHeight / 2;
+				this.camera.bottom = -frustumHeight / 2;
+
+				// Update the camera's projection matrix
+				this.camera.updateProjectionMatrix();
+			} else if (this.camera) {
+				this.camera.aspect =
+					this.container.clientWidth / this.container.clientHeight;
+				this.camera.updateProjectionMatrix();
+			}
+		}
+
+		handleResize() {
+			window.addEventListener("resize", () => {
+				const containerWidth = this.container.clientWidth;
+				const containerHeight = this.container.clientHeight;
+
+				// Adjust the renderer size to match the container
+				this.renderer.setSize(containerWidth, containerHeight);
+				if (this.usePostprocessing) {
+					this.postprocessing.composer.setSize(
+						containerWidth,
+						containerHeight,
+					);
+				}
+
+				// Adjust the camera aspect ratio
+				this.adjustCameraAspect();
+			});
+		}
+
+		// Handle mouse movement for desktop
+		handleMouseMovement() {
+			const windowHalfX = window.innerWidth / 2;
+			const windowHalfY = window.innerHeight / 2;
+
+			document.addEventListener("mousemove", (event) => {
+				this.mouseX = (event.clientX - windowHalfX) / windowHalfX;
+				this.mouseY = (event.clientY - windowHalfY) / windowHalfY;
+
+				this.mouseX = Math.max(-1, Math.min(1, this.mouseX));
+				this.mouseY = Math.max(-1, Math.min(1, this.mouseY));
+			});
+		}
+
+		// Handle device orientation for mobile
+		handleDeviceOrientation() {
+			window.addEventListener("deviceorientation", (event) => {
+				const orientation = window.orientation || 0;
+				let rawTiltX = event.gamma; // Left-to-right tilt
+				let rawTiltY = event.beta; // Front-to-back tilt
+
+				if (orientation === 90) {
+					this.tiltX = rawTiltY / 45;
+					this.tiltY = -rawTiltX / 45;
+				} else if (orientation === -90) {
+					this.tiltX = -rawTiltY / 45;
+					this.tiltY = rawTiltX / 45;
+				} else {
+					this.tiltX = rawTiltX / 45;
+					this.tiltY = rawTiltY / 45;
+				}
+
+				this.tiltX = Math.max(-1, Math.min(1, this.tiltX));
+				this.tiltY = Math.max(-1, Math.min(1, this.tiltY));
+			});
+		}
+
+		// Animation loop
+		animate() {
+			const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+			const loop = () => {
+				requestAnimationFrame(loop);
+
+				this.targetX +=
+					((isMobile ? this.tiltX : this.mouseX) - this.targetX) *
+					0.05;
+				this.targetY +=
+					((isMobile ? this.tiltY : this.mouseY) - this.targetY) *
+					0.05;
+
+				if (this.camera) {
+					this.camera.position.set(
+						this.initialCameraPosition.x,
+						this.initialCameraPosition.y,
+						this.initialCameraPosition.z,
+					);
+					this.camera.translateX(this.targetX * this.maxTiltX);
+					this.camera.translateY(this.targetY * this.maxTiltY);
+					this.camera.lookAt(this.scene.position);
+				}
+				if (this.usePostprocessing) {
+					this.postprocessing.composer.render();
+				} else {
+					this.renderer.render(this.scene, this.camera);
+				}
+			};
+
+			loop();
+		}
+
+		// Initialize the scene manager
+		init() {
+			this.initRenderer();
+			this.loadScene();
+			this.handleResize();
+			this.handleMouseMovement();
+			this.handleDeviceOrientation();
+			this.animate();
+		}
+	}
+
+	// Initialize and run the SceneManager
+	document.addEventListener("DOMContentLoaded", () => {
+		const escena = document.getElementById("three-container").dataset.src;
+		const sceneManager = new SceneManager("three-container", escena);
+		sceneManager.init();
+	});
+</script>

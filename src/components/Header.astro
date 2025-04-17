@@ -27,13 +27,13 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="nav navbar-nav justify-content-center">
 					<li class="nav-item">
-						<a class="nav-link" href="#section1">Section 1</a>
+						<a class="nav-link" href="#our-focus">Our focus</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#section2">Section 2</a>
+						<a class="nav-link" href="#our-approach">Our approach</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#section3">Section 3</a>
+						<a class="nav-link" href="#team">Team</a>
 					</li>
 				</ul>
 			</div>
@@ -43,7 +43,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		<div id="logo-container" ">
 			<Fragment set:html={logoRaw} />
 		</div>
-		<a href="#section1"
+		<a href="#our-focus"
 			><div id="scroll-button"><span id="triangle"></span></div></a
 		>
 	</div>
@@ -52,7 +52,6 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 </div>
 
 <script>
-	import { escapeHTML } from "astro/runtime/server/escape.js";
 	import { animate, stagger, svg } from "../scripts/anime.esm.min";
 
 	// Needed since caps have to become round after the animation starts, otherwise a circle is drawn

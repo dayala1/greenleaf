@@ -1,6 +1,7 @@
 ---
-import Header from '../components/Header.astro';
-import Layout from '../layouts/Layout.astro';
+import Header from "../components/Header.astro";
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -9,32 +10,94 @@ import Layout from '../layouts/Layout.astro';
 <Layout>
 	<Header />
 	<div id="sections">
-	<section id="section1" class="section">Contenido de la sección 1</section>
-	<section id="section2" class="section">Contenido de la sección 2</section>
-	<section id="section3" class="section">Contenido de la sección 3</section>
+		<section id="our-focus" class="page-section">
+			<div id="our-focus-contents" class="section-contents container-fluid">
+				<div class="row"><h1>Our focus</h1></div>
+				<div class="row">
+					<h3>Pequeña frase sobre our focus bla bla bla</h3>
+				</div>
+				<div class="row cards">
+					<div class="col-md-4">
+						<Card />
+					</div>
+					<div class="col-md-4">
+						<Card />
+					</div>
+					<div class="col-md-4">
+						<Card />
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="our-approach" class="page-section">
+			<div class="section-contents container-fluid">Contenido de la sección 2</div>
+		</section>
+		<section id="team" class="page-section">
+			Contenido de la sección 3
+		</section>
 	</div>
-	
 </Layout>
 
 <style>
 	#sections {
 	}
-	.section {
-		height: 100vh;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+	h1 {
+		margin-bottom: 30px;
+	}
+	.page-section {
+		min-height: 100vh;
+		padding: 100px 50px 30px 100px;
 		font-size: 2rem;
 		position: relative;
 	}
-	#section1 {
+	#our-focus {
 		background-color: #f8f9fa;
 	}
-	#section2 {
+	#our-approach {
 		background-color: #e9ecef;
 	}
-	#section3 {
+	#team {
 		background-color: #dee2e6;
+	}
+	.cards {
+		margin-top: 50px;
+	}
+
+	.cards .col-md-4 + .col-md-4 {
+		margin-top: 50px;
+	}
+
+	@media screen and (min-width: 768px) {
+		.cards .col-md-4 + .col-md-4 {
+			margin-top: 0px;
+		}
 	}
 </style>
 
+<script>
+	import { animate, onScroll, stagger } from "../scripts/anime.esm.min";
+	animate("#our-focus-contents", {
+		opacity: [0, 1],
+		translateX: ["-100%", "0%"],
+		duration: 1000,
+		easing: "linear",
+		autoplay: onScroll({
+			enter: "70% top",
+			leave: "30% top",
+			sync: 0.1
+		}),
+	});
+
+	animate(".card", {
+		opacity: [0, 1],
+		translateY: ["100%", "0%"],
+		duration: 1000,
+		delay: stagger(200),
+		easing: "linear",
+		autoplay: onScroll({
+			enter: "bottom top",
+			leave: "30% top",
+			sync: 0.2
+		}),
+	});
+</script>
