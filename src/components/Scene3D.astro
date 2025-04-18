@@ -1,12 +1,9 @@
 ---
-import escena from "../assets/escena_2.glb";
+const { glbPath } = Astro.props;
 ---
 
-<div
-	id="three-container"
-	data-src={escena}
-	style="width: 50vw; height: 50vh; border-radius:10px;"
->
+<div id="three-container" data-src={glbPath}>
+	<!-- The 3D scene will be rendered here -->
 </div>
 
 <script>
@@ -41,11 +38,15 @@ import escena from "../assets/escena_2.glb";
 		shadowMapSize: number;
 		mixer: null;
 		clock: any;
-		constructor(containerId, sceneFile) {
+		constructor(containerId, sceneFile, cameraName) {
 			this.container = document.getElementById(containerId);
 			this.sceneFile = sceneFile;
 			this.scene = new THREE.Scene();
-			this.renderer = new THREE.WebGLRenderer({ antialias: true });
+			this.renderer = new THREE.WebGLRenderer({
+				antialias: true,
+				alpha: true,
+			});
+			this.renderer.outputColorSpace = THREE.SRGBColorSpace;
 			this.camera = null;
 			this.initialCameraPosition = { x: 0, y: 0, z: 0 };
 			this.mouseX = 0;
@@ -54,8 +55,8 @@ import escena from "../assets/escena_2.glb";
 			this.tiltY = 0;
 			this.targetX = 0;
 			this.targetY = 0;
-			this.maxTiltX = 2; // Maximum tilt in the X direction
-			this.maxTiltY = 1; // Maximum tilt in the Y direction
+			this.maxTiltX = 0.7; // Maximum tilt in the X direction
+			this.maxTiltY = 0.5; // Maximum tilt in the Y direction
 			this.postprocessing = {};
 			this.usePostprocessing = false; // Enable postprocessing
 			this.useAmbientLight = true; // Enable ambient light
@@ -63,15 +64,22 @@ import escena from "../assets/escena_2.glb";
 			this.shadowMapSize = 1024; // Size of the shadow map
 			this.mixer = null; // Animation mixer
 			this.clock = new THREE.Clock();
+			this.animated = false; // Flag to check if the animation is running
 			this.animationDuration = 0; // Duration of the animation in seconds
 			this.animationAction = null;
+			this.enableAutoRotate = true; // Enable or disable automatic rotation
+			this.autoRotateSpeed = 0.001; // Speed of the automatic rotation
+			this.rotationAmplitude = 0.05; // Amplitude of the rotation
 		}
 
 		initPostprocessing() {
 			const renderPass = new RenderPass(this.scene, this.camera);
+			//Focus: compute distance from camera to center
+			focus = this.camera.position.distanceTo(new THREE.Vector3(0, 0, 0));
+
 			const bokehPass = new BokehPass(this.scene, this.camera, {
-				focus: 0.1,
-				aperture: 0.1,
+				focus: focus,
+				aperture: 0.001,
 				maxblur: 0.01,
 			});
 
@@ -113,13 +121,15 @@ import escena from "../assets/escena_2.glb";
 			loader.load(
 				this.sceneFile,
 				(gltf) => {
-					// Animation processing
-					this.mixer = new THREE.AnimationMixer(gltf.scene);
-					this.animationAction = this.mixer.clipAction(
-						gltf.animations[0],
-					);
-					this.animationDuration = gltf.animations[0].duration; // Store animation duration
-					this.animationAction.play();
+					if (this.animated) {
+						// Animation processing
+						this.mixer = new THREE.AnimationMixer(gltf.scene);
+						this.animationAction = this.mixer.clipAction(
+							gltf.animations[0],
+						);
+						this.animationDuration = gltf.animations[0].duration; // Store animation duration
+						this.animationAction.play();
+					}
 					this.scene.add(gltf.scene);
 					// Cast shadows
 					if (this.castShadows) {
@@ -145,9 +155,7 @@ import escena from "../assets/escena_2.glb";
 						);
 						this.scene.add(ambientLight);
 					}
-					this.camera = gltf.cameras.find(
-						(cam) => cam.name === "Camera",
-					);
+					this.camera = gltf.cameras[0];
 					if (this.camera) {
 						this.initialCameraPosition = {
 							x: this.camera.position.x,
@@ -160,7 +168,9 @@ import escena from "../assets/escena_2.glb";
 						}
 					} else {
 						console.error(
-							'No camera named "Camera" found in the GLTF file.',
+							"No camera named " +
+								this.cameraName +
+								" found in the GLTF file.",
 						);
 					}
 				},
@@ -200,6 +210,13 @@ import escena from "../assets/escena_2.glb";
 			} else if (this.camera) {
 				this.camera.aspect =
 					this.container.clientWidth / this.container.clientHeight;
+				// adjust zoom for perspective camera
+				this.camera.fov =
+					(2 *
+						Math.atan(this.container.clientHeight / 2 / 100) *
+						THREE.MathUtils.RAD2DEG) /
+					3;
+
 				this.camera.updateProjectionMatrix();
 			}
 		}
@@ -267,23 +284,42 @@ import escena from "../assets/escena_2.glb";
 			const loop = () => {
 				requestAnimationFrame(loop);
 
+				// Smoothly interpolate target positions
 				this.targetX +=
 					((isMobile ? this.tiltX : this.mouseX) - this.targetX) *
-					0.05;
+					0.02;
 				this.targetY +=
 					((isMobile ? this.tiltY : this.mouseY) - this.targetY) *
-					0.05;
+					0.02;
 
 				if (this.camera) {
-					this.camera.position.set(
-						this.initialCameraPosition.x,
-						this.initialCameraPosition.y,
-						this.initialCameraPosition.z,
-					);
-					this.camera.translateX(this.targetX * this.maxTiltX);
-					this.camera.translateY(this.targetY * this.maxTiltY);
-					this.camera.lookAt(this.scene.position);
+					// Base camera position
+					let cameraX =
+						this.initialCameraPosition.x +
+						this.targetX * this.maxTiltX;
+					let cameraY =
+						this.initialCameraPosition.y +
+						this.targetY * this.maxTiltY;
+					let cameraZ = this.initialCameraPosition.z;
+
+					// Add automatic rotation if enabled
+					if (this.enableAutoRotate) {
+						const time = performance.now() * this.autoRotateSpeed;
+						cameraX +=
+							Math.sin(time) * this.initialCameraPosition.z * this.rotationAmplitude; 
+						cameraY +=
+							Math.cos(time) * this.initialCameraPosition.z * this.rotationAmplitude; // Adjust multiplier for rotation radius
+					}
+
+					// Update the camera's position
+					this.camera.position.set(cameraX, cameraY, cameraZ);
+
+					// Ensure the camera always looks at the center of the scene
+					const lookAtTarget = new THREE.Vector3(0, 0, 0); // Replace with the actual target if needed
+					this.camera.lookAt(lookAtTarget);
 				}
+
+				// Render the scene
 				if (this.usePostprocessing) {
 					this.postprocessing.composer.render();
 				} else {
@@ -312,3 +348,14 @@ import escena from "../assets/escena_2.glb";
 		sceneManager.init();
 	});
 </script>
+
+<style>
+	#three-container {
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		position: absolute;
+		overflow: hidden;
+	}
+</style>

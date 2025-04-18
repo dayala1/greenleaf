@@ -1,13 +1,10 @@
 ---
-const cardColor = "lightgrey"; // Light color for the card background
+const cardColor = "white"; // Light color for the card background
 ---
 
 <div class="card">
-    <img
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/800px-Placeholder_view_vector.svg.png"
-        alt="Card image"
-        class="card-img-top"
-    />
+    <div class="card-img-top">
+       <slot/>
     <div class="card-non-img">
         <div class="card-header">
             <h3>Card Title</h3>
@@ -54,7 +51,7 @@ const cardColor = "lightgrey"; // Light color for the card background
             left: 0;
             top: -10px;
             height: 900px;
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255,126, 121, 0.35);
             backdrop-filter: blur(10px);
             transform: skewY(-5deg) scale(1.1);
             transform-origin: top ;
@@ -70,4 +67,10 @@ const cardColor = "lightgrey"; // Light color for the card background
         font-size: x-large;
         border:none;
     }
+
+    @media screen and (min-width: 768px) {
+		.card {
+			max-width: 400px;
+		}
+	}
 </style>
