@@ -1,19 +1,21 @@
 ---
 import logo from "../assets/logo.svg";
-const base = import.meta.env.BASE_URL+"/";
+let base = import.meta.env.BASE_URL;
+// Add / at the end of the base URL if it doesn't exist
+if (base[base.length - 1] !== "/") {
+    base += "/";
+}
 const url = Astro.url.pathname;
 const isIndex = url === base;
-console.log("url", url);
-console.log("base", base);
-console.log("isIndex", isIndex);
-const ourFocusHref = isIndex ? `#our-focus` : `${base}/#our-focus`;
-const ourApproachHref = isIndex ? `#our-approach` : `${base}/#our-approach`;
-const teamHref = isIndex ? `#team` : `${base}/#team`;
+const ourFocusHref = isIndex ? `#our-focus` : `${base}#our-focus`;
+const ourApproachHref = isIndex ? `#our-approach` : `${base}#our-approach`;
+const teamHref = isIndex ? `#team` : `${base}#team`;
 ---
 
 <nav id="menu" class="navbar fixed-top navbar-expand-md justify-content-center">
     <div class="container-fluid">
-        <a class="navbar-brand" href=`${base}`><img id="nav-logo" src={logo.src} /></a
+        <a class="navbar-brand" href=`${base}`
+            ><img id="nav-logo" src={logo.src} /></a
         >
         <button
             class="navbar-toggler"
@@ -40,8 +42,7 @@ const teamHref = isIndex ? `#team` : `${base}/#team`;
                     <a class="nav-link" href=`${teamHref}`>Team</a>
                 </li>
                 <li id="contact-button" class="nav-item">
-                    <a class="nav-link" href=`${base}contact#contact`
-                        >Contact</a
+                    <a class="nav-link" href=`${base}contact#contact`>Contact</a
                     >
                 </li>
             </ul>
@@ -60,8 +61,10 @@ const teamHref = isIndex ? `#team` : `${base}/#team`;
     }
 
     nav {
+        scrollbar-gutter: stable;
         background-color: rgba(255, 255, 255, 0.5);
         backdrop-filter: blur(10px);
+        width: 100%;
     }
     .nav-item {
         background-color: rgba(255, 255, 255, 0);
@@ -92,7 +95,7 @@ const teamHref = isIndex ? `#team` : `${base}/#team`;
         border-radius: 999px;
         transition: all 0.5s;
 
-        .nav-link{
+        .nav-link {
             color: #ef857d;
             text-align: center;
             &.active {
@@ -101,7 +104,7 @@ const teamHref = isIndex ? `#team` : `${base}/#team`;
             }
         }
 
-        &:has(.nav-link.active){
+        &:has(.nav-link.active) {
             background: linear-gradient(to bottom right, #ef857d, #ffcd9e);
             box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.2);
         }
@@ -127,3 +130,14 @@ const teamHref = isIndex ? `#team` : `${base}/#team`;
         }
     }
 </style>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+        import("../scripts/bootstrap.bundle.min.js").then(() => {
+            var scrollSpy = new bootstrap.ScrollSpy(document.body, {
+                target: "#navbarNav",
+            });
+            scrollSpy.refresh();
+        });
+    });
+</script>

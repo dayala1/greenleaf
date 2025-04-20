@@ -3,10 +3,6 @@
     src: url('/greenleaf/fonts/Fredoka-Variable.ttf') format('truetype');
 }
 
-body {
-    scrollbar-gutter: stable;
-}
-
 section+section {
     outline: 5px solid #de9a97;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);

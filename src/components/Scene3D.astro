@@ -14,7 +14,6 @@ const { glbPath } = Astro.props;
 	import { BokehPass } from "three/addons/postprocessing/BokehPass.js";
 
 	import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
-
 	// Utility class to manage 3D scenes
 	class SceneManager {
 		container: HTMLElement | null;
@@ -355,7 +354,7 @@ const { glbPath } = Astro.props;
 	}
 
 	// Initialize and run the SceneManager
-	document.addEventListener("DOMContentLoaded", () => {
+	document.addEventListener("astro:page-load", () => {
 		const escena = document.getElementById("three-container").dataset.src;
 		const sceneManager = new SceneManager("three-container", escena);
 		sceneManager.init();

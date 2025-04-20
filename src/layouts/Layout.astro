@@ -1,8 +1,10 @@
 ---
-import '../styles/bootstrap.min.css';
-import '../styles/global.css'
+import "../styles/bootstrap.min.css";
+import "../styles/global.css";
 import Nav from "../components/Nav.astro";
+import { ClientRouter } from "astro:transitions";
 ---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -11,9 +13,10 @@ import Nav from "../components/Nav.astro";
 		<link rel="icon" type="image/svg+xml" href="/greenleaf/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Greenleaf</title>
+		<ClientRouter />
 	</head>
-	<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-offset="0">
-		<Nav />
+	<body>
+		<Nav transition:persist />
 		<slot />
 	</body>
 </html>
@@ -28,5 +31,4 @@ import Nav from "../components/Nav.astro";
 </style>
 
 <script>
-	import '../scripts/bootstrap.bundle.min.js';
 </script>

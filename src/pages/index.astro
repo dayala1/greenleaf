@@ -33,7 +33,7 @@ const team_spans = team_content
 				id="our-focus-contents"
 				class="section-contents container-fluid"
 			>
-				<div class="row section-title ">
+				<div class="row section-title">
 					<h1><Fragment set:html={focus_spans} /></h1>
 				</div>
 				<div class="row">
@@ -78,7 +78,7 @@ const team_spans = team_content
 				id="our-approach-contents"
 				class="section-contents container-fluid"
 			>
-				<div class="row section-title" >
+				<div class="row section-title">
 					<h1><Fragment set:html={approach_spans} /></h1>
 				</div>
 				<div class="row">
@@ -186,65 +186,69 @@ const team_spans = team_content
 
 <script>
 	import { animate, onScroll, stagger } from "../scripts/anime.esm.min";
+	document.addEventListener("astro:page-load", () => {
+		
 
-	document.querySelectorAll(".section-contents").forEach((section, index) => {
-		animate(section, {
-			opacity: [0, 1],
-			translateX: ["-100%", "0%"],
-			duration: 1000,
-			easing: "linear",
-			autoplay: onScroll({
-				enter: "90% top",
-				leave: "40% top",
-				sync: 0.1,
-			}),
-		});
+		document
+			.querySelectorAll(".section-contents")
+			.forEach((section, index) => {
+				animate(section, {
+					opacity: [0, 1],
+					translateX: ["-100%", "0%"],
+					duration: 1000,
+					easing: "linear",
+					autoplay: onScroll({
+						enter: "90% top",
+						leave: "40% top",
+						sync: 0.1,
+					}),
+				});
 
-		animate(section.querySelectorAll("h1 span"), {
-			opacity: [0, 1],
-			translateY: ["-100%", "0%"],
-			"--pseudo-el-before-x": ["-100%", "0%"],
+				animate(section.querySelectorAll("h1 span"), {
+					opacity: [0, 1],
+					translateY: ["-100%", "0%"],
+					"--pseudo-el-before-x": ["-100%", "0%"],
+					duration: 1000,
+					delay: stagger(200),
+					autoplay: onScroll({
+						enter: "90% top",
+						leave: "40% top",
+						sync: 0.1,
+					}),
+				});
+			});
+
+		animate(".card", {
+			opacity: [0, 0, 1],
+			translateY: ["100%", "0%"],
 			duration: 1000,
 			delay: stagger(200),
 			autoplay: onScroll({
-				enter: "90% top",
+				enter: "bottom top",
 				leave: "40% top",
-				sync: 0.1,
+				sync: 0.2,
 			}),
 		});
-	});
-
-	 
-	animate(".card", {
-		opacity: [0, 0, 1],
-		translateY: ["100%", "0%"],
-		duration: 1000,
-		delay: stagger(200),
-		autoplay: onScroll({
-			enter: "bottom top",
-			leave: "40% top",
-			sync: 0.2,
-		}),
-	});
-	animate("#model3d", {
-		opacity: [0, 0, 1],
-		translateY: ["100%", "0%"],
-		duration: 1000,
-		autoplay: onScroll({
-			enter: "bottom top",
-			leave: "40% top",
-			sync: 0.2,
-		}),
-	});
-	animate(".our-approach-bg", {
-		x: ["-100%", "0%"],
-		skewX: ["-10deg", "-10deg"],
-		duration: 1000,
-		delay: stagger(-200),
-		autoplay: onScroll({
-			enter: "bottom top",
-			leave: "40% top",
-			sync: 0.2,
-		}),
+		animate("#model3d", {
+			opacity: [0, 0, 1],
+			translateY: ["100%", "0%"],
+			duration: 1000,
+			autoplay: onScroll({
+				enter: "bottom top",
+				leave: "40% top",
+				sync: 0.2,
+			}),
+		});
+		animate(".our-approach-bg", {
+			x: ["-100%", "0%"],
+			skewX: ["-10deg", "-10deg"],
+			duration: 1000,
+			delay: stagger(-200),
+			autoplay: onScroll({
+				enter: "bottom top",
+				leave: "40% top",
+				sync: 0.2,
+			}),
+		});
 	});
 </script>
