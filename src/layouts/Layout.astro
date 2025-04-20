@@ -1,17 +1,19 @@
 ---
 import '../styles/bootstrap.min.css';
 import '../styles/global.css'
+import Nav from "../components/Nav.astro";
 ---
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/svg+xml" href="/greenleaf/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>Greenleaf</title>
 	</head>
 	<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-offset="0">
+		<Nav />
 		<slot />
 	</body>
 </html>

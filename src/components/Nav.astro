@@ -1,6 +1,14 @@
 ---
 import logo from "../assets/logo.svg";
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL+"/";
+const url = Astro.url.pathname;
+const isIndex = url === base;
+console.log("url", url);
+console.log("base", base);
+console.log("isIndex", isIndex);
+const ourFocusHref = isIndex ? `#our-focus` : `${base}/#our-focus`;
+const ourApproachHref = isIndex ? `#our-approach` : `${base}/#our-approach`;
+const teamHref = isIndex ? `#team` : `${base}/#team`;
 ---
 
 <nav id="menu" class="navbar fixed-top navbar-expand-md justify-content-center">
@@ -21,18 +29,18 @@ const base = import.meta.env.BASE_URL;
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="nav navbar-nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link" href=`${base}#our-focus`>Our focus</a>
+                    <a class="nav-link" href=`${ourFocusHref}`>Our focus</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href=`${base}#our-approach`
+                    <a class="nav-link" href=`${ourApproachHref}`
                         >Our approach</a
                     >
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href=`${base}#team`>Team</a>
+                    <a class="nav-link" href=`${teamHref}`>Team</a>
                 </li>
                 <li id="contact-button" class="nav-item">
-                    <a class="nav-link" href=`${base}/contact#contact`
+                    <a class="nav-link" href=`${base}contact#contact`
                         >Contact</a
                     >
                 </li>
