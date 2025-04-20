@@ -39,7 +39,7 @@ const teamHref = isIndex ? `#team` : `${base}#team`;
                     >
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href=`${teamHref}`>Team</a>
+                    <a class="nav-link" href=`{teamHref}`>Team</a>
                 </li>
                 <li id="contact-button" class="nav-item">
                     <a class="nav-link" href=`${base}contact#contact`>Contact</a
@@ -132,12 +132,11 @@ const teamHref = isIndex ? `#team` : `${base}#team`;
 </style>
 
 <script>
+    import {ScrollSpy} from "bootstrap/dist/js/bootstrap.esm.min.js";
     document.addEventListener("astro:page-load", () => {
-        import("../scripts/bootstrap.bundle.min.js").then(() => {
-            var scrollSpy = new bootstrap.ScrollSpy(document.body, {
-                target: "#navbarNav",
-            });
-            scrollSpy.refresh();
+        var scrollSpy = new ScrollSpy(document.body, {
+            target: "#navbarNav",
         });
+        scrollSpy.refresh();
     });
 </script>
