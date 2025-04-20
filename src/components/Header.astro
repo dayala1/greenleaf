@@ -1,44 +1,12 @@
 ---
+import Nav from "./Nav.astro";
 import headerVideo from "../assets/header_video.webm";
-import logo from "../assets/logo.svg";
 import logoRaw from "../assets/logo_animation.svg?raw";
+
 ---
 
 <div id="header">
-	<nav
-		id="menu"
-		class="navbar fixed-top navbar-expand-md justify-content-center"
-	>
-		<div class="container-fluid">
-			<a class="navbar-brand" href="#"
-				><img id="nav-logo" src={logo.src} /></a
-			>
-			<button
-				class="navbar-toggler"
-				type="button"
-				data-bs-toggle="collapse"
-				data-bs-target="#navbarNav"
-				aria-controls="navbarNav"
-				aria-expanded="false"
-				aria-label="Toggle navigation"
-			>
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="nav navbar-nav justify-content-center">
-					<li class="nav-item">
-						<a class="nav-link" href="#our-focus">Our focus</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#our-approach">Our approach</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#team">Team</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+	<Nav />
 	<div id="header-center">
 		<div id="logo-container" ">
 			<Fragment set:html={logoRaw} />
@@ -157,14 +125,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 </style>
 
 <style>
-	a {
-		text-decoration: none;
-	}
-	#nav-logo {
-		height: 50px;
-		max-height: 80%;
-		margin-left: 10px;
-	}
+	
 	#header {
 		top: 0;
 		left: 0;
@@ -199,33 +160,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		height: 100vh;
 		position: relative;
 	}
-	nav {
-		background-color: rgba(255, 255, 255, 0.5);
-		backdrop-filter: blur(10px);
-	}
-	.nav-item {
-		background-color: rgba(255, 255, 255, 0);
-		margin: 1em;
-	}
-	.nav-link {
-		transition: all 0.2s ease;
-		transform-origin: left;
-		color: #7f7f7f;
-		font-size: larger;
-		font-weight: 600;
-		&.active {
-			transform: scale(1.4);
-			color: #ef857d !important;
-		}
-	}
-	#menu {
-		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-	}
-	.navbar-brand {
-		padding-right: 0;
-		font-size: 2em;
-		transform: translatey(-10%);
-	}
+	
 	#header-center {
 		height: 100%;
 		display: flex;
@@ -278,22 +213,5 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		border-left: 40px solid transparent;
 		border-right: 40px solid transparent;
 		border-bottom: 40px solid white;
-	}
-
-	@media (min-width: 768px) {
-		/* Video becomes 100% height in desktop */
-		nav {
-			height: 5em;
-		}
-		#navbarNav {
-			flex-grow: 0;
-		}
-		.container-fluid {
-			width: 100%;
-			justify-content: center !important;
-		}
-		.nav-link {
-			transform-origin: center;
-		}
 	}
 </style>

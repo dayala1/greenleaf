@@ -261,6 +261,15 @@ const { glbPath } = Astro.props;
 				let rawTiltX = event.gamma; // Left-to-right tilt
 				let rawTiltY = event.beta; // Front-to-back tilt
 
+				// Adjust for typical default angles
+				if (orientation === 0) {
+					rawTiltY -= 90; // Default beta is 90 in portrait mode
+				} else if (orientation === 90) {
+					rawTiltX -= 90; // Default gamma is 90 in landscape-left
+				} else if (orientation === -90) {
+					rawTiltX += 90; // Default gamma is -90 in landscape-right
+				}
+
 				if (orientation === 90) {
 					this.tiltX = rawTiltY / 45;
 					this.tiltY = -rawTiltX / 45;
@@ -306,9 +315,13 @@ const { glbPath } = Astro.props;
 					if (this.enableAutoRotate) {
 						const time = performance.now() * this.autoRotateSpeed;
 						cameraX +=
-							Math.sin(time) * this.initialCameraPosition.z * this.rotationAmplitude; 
+							Math.sin(time) *
+							this.initialCameraPosition.z *
+							this.rotationAmplitude;
 						cameraY +=
-							Math.cos(time) * this.initialCameraPosition.z * this.rotationAmplitude; // Adjust multiplier for rotation radius
+							Math.cos(time) *
+							this.initialCameraPosition.z *
+							this.rotationAmplitude; // Adjust multiplier for rotation radius
 					}
 
 					// Update the camera's position

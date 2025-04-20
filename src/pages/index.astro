@@ -4,6 +4,25 @@ import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 import Scene3D from "../components/Scene3D.astro";
 import escena from "../assets/greenleaf.glb";
+
+const focus_content = "Our focus".split("");
+const approach_content = "Our approach".split("");
+const team_content = "Team".split("");
+const focus_spans = focus_content
+	.map((letter, index) => {
+		return `<span class="letter letter-${index}">${letter}</span>`;
+	})
+	.join("");
+const approach_spans = approach_content
+	.map((letter, index) => {
+		return `<span class="letter letter-${index}">${letter}</span>`;
+	})
+	.join("");
+const team_spans = team_content
+	.map((letter, index) => {
+		return `<span class="letter letter-${index}">${letter}</span>`;
+	})
+	.join("");
 ---
 
 <Layout>
@@ -14,7 +33,9 @@ import escena from "../assets/greenleaf.glb";
 				id="our-focus-contents"
 				class="section-contents container-fluid"
 			>
-				<div class="row"><h1>Our focus</h1></div>
+				<div class="row section-title ">
+					<h1><Fragment set:html={focus_spans} /></h1>
+				</div>
 				<div class="row">
 					<h3>Pequeña frase sobre our focus bla bla bla</h3>
 				</div>
@@ -50,13 +71,21 @@ import escena from "../assets/greenleaf.glb";
 			</div>
 		</section>
 		<section id="our-approach" class="page-section">
+			<div class="our-approach-bg" id="our-approach-bg-1"></div>
+			<div class="our-approach-bg" id="our-approach-bg-2"></div>
+			<div class="our-approach-bg" id="our-approach-bg-3"></div>
 			<div
 				id="our-approach-contents"
 				class="section-contents container-fluid"
 			>
-				<div class="row"><h1>Our approach</h1></div>
+				<div class="row section-title" >
+					<h1><Fragment set:html={approach_spans} /></h1>
+				</div>
 				<div class="row">
-					<div class="col-lg-6 align-self-center">
+					<div
+						id="our-approach-text"
+						class="col-lg-6 align-self-center"
+					>
 						<h3>
 							Contenido a la izquierda en una columna que ocupa la
 							mayoría del espacio disponible
@@ -64,50 +93,33 @@ import escena from "../assets/greenleaf.glb";
 					</div>
 					<div class="col-lg-6 mt-5">
 						<div id="model3d">
-							<Scene3D glbPath={escena} camera="Camera"/>
+							<Scene3D glbPath={escena} camera="Camera" />
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
 		<section id="team" class="page-section">
-			Contenido de la sección 3
+			<div id="team-contents" class="section-contents container-fluid">
+				<div class="row section-title">
+					<h1><Fragment set:html={team_spans} /></h1>
+				</div>
+				<div class="row"></div>
+			</div>
 		</section>
 	</div>
 </Layout>
 
 <style>
-	#sections {
-	}
-
-	section + section {
-		outline: 5px solid rgba(255,126, 121, 0.35);
-		box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
-	}
-
-	.page-section {
-		padding: 100px 10px 30px 10px;
-		min-height: 100vh;
-		font-size: 2rem;
-		position: relative;
-
-		h1 {
-			margin-bottom: 30px;
-			color: #7f7f7f;
-		}
-
-		h3 {
-			line-height: 180%;
-		}
-	}
 	#our-focus {
-		background-color: white;
+		background: linear-gradient(to right, #ffe2c9, white);
 	}
 	#our-approach {
-		background-color: #FAECE0;
+		background: linear-gradient(to right, #ffbfbd, #faece0);
 	}
 	#team {
-		background-color: white;
+		background: linear-gradient(to right, #ffe2c9, white);
+		z-index: 5;
 	}
 	.cards {
 		margin-top: 50px;
@@ -119,43 +131,116 @@ import escena from "../assets/greenleaf.glb";
 	.cards .col-md-4 + .col-md-4 {
 		margin-top: 50px;
 	}
+
 	#model3d {
 		height: 70vh;
 		border-radius: 20px;
 		position: relative;
 		overflow: hidden;
+		z-index: 1 !important;
 	}
 
 	@media screen and (min-width: 768px) {
 		.cards .col-md-4 + .col-md-4 {
 			margin-top: 0px;
 		}
-		.page-section {
-			padding: 100px 50px 30px 50px;
+
+		#our-approach {
+			background: linear-gradient(to right, #ffbfbd 60%, #faece0 90%);
+		}
+
+		.our-approach-bg {
+			content: "";
+			top: 0px;
+			left: 0px;
+			display: block;
+			position: absolute;
+			height: 100%;
+			width: 60%;
+			background-color: white;
+			z-index: 3;
+			transform: skewX(-10deg);
+			transform-origin: top;
+			box-shadow: 50px 0px 50px rgba(0, 0, 0, 0.1);
+		}
+		#our-approach-bg-1 {
+			z-index: 3;
+			left: -100px;
+			background: linear-gradient(to bottom, #faece0, white);
+		}
+		#our-approach-bg-2 {
+			z-index: 2;
+			left: -50px;
+			background: #ffeae0;
+		}
+		#our-approach-bg-3 {
+			z-index: 1;
+			background: #ffdad3;
+		}
+		#our-approach-contents {
+			z-index: 4;
+			position: relative;
 		}
 	}
 </style>
 
 <script>
 	import { animate, onScroll, stagger } from "../scripts/anime.esm.min";
-	animate("#our-focus-contents", {
-		opacity: [0, 1],
-		translateX: ["-100%", "0%"],
-		duration: 1000,
-		easing: "linear",
-		autoplay: onScroll({
-			enter: "90% top",
-			leave: "40% top",
-			sync: 0.1,
-		}),
+
+	document.querySelectorAll(".section-contents").forEach((section, index) => {
+		animate(section, {
+			opacity: [0, 1],
+			translateX: ["-100%", "0%"],
+			duration: 1000,
+			easing: "linear",
+			autoplay: onScroll({
+				enter: "90% top",
+				leave: "40% top",
+				sync: 0.1,
+			}),
+		});
+
+		animate(section.querySelectorAll("h1 span"), {
+			opacity: [0, 1],
+			translateY: ["-100%", "0%"],
+			"--pseudo-el-before-x": ["-100%", "0%"],
+			duration: 1000,
+			delay: stagger(200),
+			autoplay: onScroll({
+				enter: "90% top",
+				leave: "40% top",
+				sync: 0.1,
+			}),
+		});
 	});
 
+	 
 	animate(".card", {
 		opacity: [0, 0, 1],
 		translateY: ["100%", "0%"],
 		duration: 1000,
 		delay: stagger(200),
-		easing: "linear",
+		autoplay: onScroll({
+			enter: "bottom top",
+			leave: "40% top",
+			sync: 0.2,
+		}),
+	});
+	animate("#model3d", {
+		opacity: [0, 0, 1],
+		translateY: ["100%", "0%"],
+		duration: 1000,
+		autoplay: onScroll({
+			enter: "bottom top",
+			leave: "40% top",
+			sync: 0.2,
+		}),
+	});
+	animate(".our-approach-bg", {
+		x: ["-100%", "0%"],
+		skewX: ["-10deg", "-10deg"],
+		duration: 1000,
+		delay: stagger(-200),
 		autoplay: onScroll({
 			enter: "bottom top",
 			leave: "40% top",

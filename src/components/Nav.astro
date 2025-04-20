@@ -1,0 +1,121 @@
+---
+import logo from "../assets/logo.svg";
+const base = import.meta.env.BASE_URL;
+---
+
+<nav id="menu" class="navbar fixed-top navbar-expand-md justify-content-center">
+    <div class="container-fluid">
+        <a class="navbar-brand" href=`${base}`><img id="nav-logo" src={logo.src} /></a
+        >
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav navbar-nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href=`${base}#our-focus`>Our focus</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href=`${base}#our-approach`
+                        >Our approach</a
+                    >
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href=`${base}#team`>Team</a>
+                </li>
+                <li id="contact-button" class="nav-item">
+                    <a class="nav-link" href=`${base}/contact#contact`
+                        >Contact</a
+                    >
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+    a {
+        text-decoration: none;
+    }
+    #nav-logo {
+        height: 50px;
+        max-height: 80%;
+        margin-left: 10px;
+    }
+
+    nav {
+        background-color: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+    }
+    .nav-item {
+        background-color: rgba(255, 255, 255, 0);
+        margin: 1em;
+    }
+    .nav-link {
+        transition: all 0.2s ease;
+        transform-origin: left;
+        color: #7f7f7f;
+        font-size: larger;
+        font-weight: 600;
+        &.active {
+            transform: scale(1.4);
+            color: #ef857d !important;
+        }
+    }
+    #menu {
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-brand {
+        padding-right: 0;
+        font-size: 2em;
+        transform: translatey(-10%);
+    }
+
+    #contact-button {
+        border: solid 2px #ef857d;
+        border-radius: 999px;
+        transition: all 0.5s;
+
+        .nav-link{
+            color: #ef857d;
+            text-align: center;
+            &.active {
+                transform: scale(1);
+                color: white !important;
+            }
+        }
+
+        &:has(.nav-link.active){
+            background: linear-gradient(to bottom right, #ef857d, #ffcd9e);
+            box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    @media (min-width: 768px) {
+        /* Video becomes 100% height in desktop */
+        nav {
+            height: 5em;
+        }
+        #navbarNav {
+            flex-grow: 0;
+        }
+        .container-fluid {
+            width: 100%;
+            justify-content: center !important;
+        }
+        .nav-link {
+            transform-origin: center;
+        }
+        #contact-button {
+            margin-left: 100px;
+        }
+    }
+</style>

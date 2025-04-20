@@ -1,0 +1,122 @@
+---
+import Nav from "../components/Nav.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+	<Nav />
+	<div id="sections">
+		<section id="contact" class="page-section">
+			<div class="section-contents container-fluid">
+				<div class="row section-title">
+					<h1>Contact</h1>
+				</div>
+				<div class="row">
+					<h3>
+						Get in touch to discuss how we can optimise your
+						bio-manufacturing process PENDIENTE
+					</h3>
+				</div>
+				<form id="contact-form" class="row">
+					<div class="col-md-6">
+						<div class="form-floating mb-3">
+							<input
+								type="text"
+								class="form-control"
+								id="first-name"
+								name="first-name"
+								placeholder="First Name"
+								required
+							/>
+							<label for="first-name">First Name (required)</label
+							>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-floating mb-3">
+							<input
+								type="text"
+								class="form-control"
+								id="last-name"
+								name="last-name"
+								placeholder="Last Name"
+								required
+							/>
+							<label for="last-name">Last Name (required)</label>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-floating mb-3">
+							<input
+								type="email"
+								class="form-control"
+								id="email"
+								name="email"
+								placeholder="name@example.com"
+								required
+							/>
+							<label for="email">Email (required)</label>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="mb-3">
+							<textarea
+								class="form-control t"
+								id="message"
+								name="message"
+								placeholder="Your message"
+								rows="5"
+								required></textarea>
+						</div>
+					</div>
+					<div class="col-12 text-center">
+						<button type="submit" class="btn btn-primary"
+							>Send</button
+						>
+					</div>
+				</form>
+			</div>
+		</section>
+	</div>
+</Layout>
+
+<style>
+	form {
+		width: 100%;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	.form-control {
+		border-radius: 99px;
+		&:focus {
+			box-shadow: 0 0 0 0.2rem rgba(222, 154, 151, 0.25);
+			border-color: #de9a97;
+		}
+	}
+
+	textarea {
+		height: 200px;
+		border-radius: 2rem !important;
+		padding: 20px;
+	}
+
+
+	button {
+		text-align: center;
+		justify-content: center;
+		width: 100%;
+		border-radius: 99px !important;
+		background: #de9a97;
+		color: #fff;
+		padding: 10px 20px;
+		border: none;
+		border-radius: 5px;
+		font-size: 1.5rem;
+		cursor: pointer;
+	}
+
+	button:hover {
+		background: #333;
+	}
+</style>

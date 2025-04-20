@@ -1,0 +1,51 @@
+@font-face {
+    font-family: 'Fredoka';
+    src: url('/greenleaf/fonts/Fredoka-Variable.ttf') format('truetype');
+}
+
+section+section {
+    outline: 5px solid #de9a97;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
+}
+
+
+.page-section {
+    padding: 100px 10px 30px 10px;
+    min-height: 100vh;
+    position: relative;
+
+
+    h1 {
+        text-align: center;
+        max-width: 100%;
+        margin-bottom: 30px;
+        display: inline-block;
+        transform-origin: left;
+        font-size: 3rem;
+        font-family: 'Fredoka', serif;
+
+        color: #de9a97;
+        text-shadow: 0 2px 0px #7f7f7f;
+
+        span {
+            display: inline-block;
+            white-space: pre;
+        }
+    }
+
+    h3 {
+        line-height: 180%;
+        color: #7f7f7f;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .page-section {
+        padding: 125px 50px 30px 50px;
+
+        h1 {
+            text-align: left;
+            padding-left: 50px; 
+        }
+    }
+}
