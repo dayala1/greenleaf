@@ -55,7 +55,7 @@ const { glbPath } = Astro.props;
 			this.tiltY = 0;
 			this.targetX = 0;
 			this.targetY = 0;
-			this.maxTiltX = 0.7; // Maximum tilt in the X direction
+			this.maxTiltX = 0.5; // Maximum tilt in the X direction
 			this.maxTiltY = 0.5; // Maximum tilt in the Y direction
 			this.postprocessing = {};
 			this.usePostprocessing = false; // Enable postprocessing
@@ -103,7 +103,7 @@ const { glbPath } = Astro.props;
 
 			// Set the renderer size to match the container
 			this.renderer.setSize(containerWidth, containerHeight);
-			this.renderer.setPixelRatio(window.devicePixelRatio);
+			this.renderer.setPixelRatio(window.devicePixelRatio*1.5);
 			this.renderer.physicallyCorrectLights = true;
 			// Cast shadows
 			if (this.castShadows) {
@@ -191,14 +191,11 @@ const { glbPath } = Astro.props;
 
 		// Adjust the camera's aspect ratio for orthographic cameras
 		adjustCameraAspect() {
+			const containerWidth = this.container.clientWidth;
+			const containerHeight = this.container.clientHeight;
+			const frustumHeight = this.camera.top - this.camera.bottom;
 			if (this.camera && this.camera.isOrthographicCamera) {
-				const containerWidth = this.container.clientWidth;
-				const containerHeight = this.container.clientHeight;
 				const aspect = containerWidth / containerHeight;
-
-				// Maintain the original frustum height
-				const frustumHeight = this.camera.top - this.camera.bottom;
-
 				// Calculate the new frustum width based on the aspect ratio
 				const frustumWidth = frustumHeight * aspect;
 
@@ -211,15 +208,10 @@ const { glbPath } = Astro.props;
 				// Update the camera's projection matrix
 				this.camera.updateProjectionMatrix();
 			} else if (this.camera) {
-				this.camera.aspect =
-					this.container.clientWidth / this.container.clientHeight;
-				// adjust zoom for perspective camera
-				this.camera.fov =
-					(2 *
-						Math.atan(this.container.clientHeight / 2 / 100) *
-						THREE.MathUtils.RAD2DEG) /
-					3;
-
+				// Adjust the aspect ratio
+				this.camera.aspect = containerWidth / containerHeight;
+				
+				// Update the camera's projection matrix
 				this.camera.updateProjectionMatrix();
 			}
 		}
@@ -339,7 +331,9 @@ const { glbPath } = Astro.props;
 				if (this.usePostprocessing) {
 					this.postprocessing.composer.render();
 				} else {
-					this.renderer.render(this.scene, this.camera);
+					if (this.camera) {
+						this.renderer.render(this.scene, this.camera);
+					}
 				}
 			};
 
@@ -372,6 +366,10 @@ const { glbPath } = Astro.props;
 		top: 0;
 		left: 0;
 		position: absolute;
-		overflow: hidden;
+		overflow: visible;
+
+		canvas {
+			transform: scale(1.5);
+		}
 	}
 </style>

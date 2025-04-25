@@ -12,7 +12,7 @@ const ourApproachHref = isIndex ? `#our-approach` : `${base}#our-approach`;
 const teamHref = isIndex ? `#team` : `${base}#team`;
 ---
 
-<nav id="menu" class="navbar fixed-top navbar-expand-md justify-content-center">
+<nav id="menu" class="navbar fixed-top navbar-expand-lg justify-content-center">
     <div class="container-fluid">
         <a class="navbar-brand" href=`${base}`
             ><img id="nav-logo" src={logo.src} /></a
@@ -61,7 +61,6 @@ const teamHref = isIndex ? `#team` : `${base}#team`;
     }
 
     nav {
-        scrollbar-gutter: stable;
         background-color: rgba(255, 255, 255, 0.5);
         backdrop-filter: blur(10px);
         width: 100%;
@@ -69,11 +68,12 @@ const teamHref = isIndex ? `#team` : `${base}#team`;
     .nav-item {
         background-color: rgba(255, 255, 255, 0);
         margin: 1em;
+        z-index: 2;
     }
     .nav-link {
         transition: all 0.2s ease;
         transform-origin: left;
-        color: #7f7f7f;
+        color: #3b3838;
         font-size: larger;
         font-weight: 600;
         &.active {
@@ -91,12 +91,12 @@ const teamHref = isIndex ? `#team` : `${base}#team`;
     }
 
     #contact-button {
-        border: solid 2px #ef857d;
+        border: solid 2px #ff7e79;
         border-radius: 999px;
         transition: all 0.5s;
 
         .nav-link {
-            color: #ef857d;
+            color: #ff7e79;
             text-align: center;
             &.active {
                 transform: scale(1);
@@ -105,12 +105,12 @@ const teamHref = isIndex ? `#team` : `${base}#team`;
         }
 
         &:has(.nav-link.active) {
-            background: linear-gradient(to bottom right, #ef857d, #ffcd9e);
+            background: linear-gradient(to bottom right, #ff7e79, #ffcd9e);
             box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.2);
         }
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 992px) {
         /* Video becomes 100% height in desktop */
         nav {
             height: 5em;

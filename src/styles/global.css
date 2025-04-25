@@ -5,7 +5,7 @@
 }
 
 section+section {
-    outline: 5px solid #de9a97;
+    outline: 5px solid #ff7e79;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
 }
 
@@ -14,6 +14,7 @@ section+section {
     padding: 100px 10px 30px 10px;
     min-height: 100vh;
     position: relative;
+    overflow: hidden;
 
 
     h1 {
@@ -25,8 +26,8 @@ section+section {
         font-size: 3rem;
         font-family: 'Fredoka', serif;
 
-        color: #de9a97;
-        text-shadow: 0 2px 0px #7f7f7f;
+        color: #ff7e79;
+        /*text-shadow: 0 2px 0px #7f7f7f;*/
 
         span {
             display: inline-block;
@@ -36,7 +37,7 @@ section+section {
 
     h3 {
         line-height: 180%;
-        color: #7f7f7f;
+        color: #3b3838;
     }
 }
 

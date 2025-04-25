@@ -1,76 +1,91 @@
 ---
 const cardColor = "white"; // Light color for the card background
+const { title, contents } = Astro.props;
 ---
 
 <div class="card">
     <div class="card-img-top">
-       <slot/>
-    <div class="card-non-img">
-        <div class="card-header">
-            <h3>Card Title</h3>
+        <slot />
+        <div class="card-non-img">
+            <div class="card-header">
+                <h3>{title}</h3>
+            </div>
+            <div class="card-body">{contents}</div>
         </div>
-        <div class="card-body">Holaa esto es una prueba de una caja con más texto</div>
     </div>
-</div>
 
-<style define:vars={{ cardColor }}>
-    .card {
-        border-radius: 20px;
-        overflow: hidden;
-        border: none;
-        background-color: var(--cardColor);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
-    .card-header {
-        justify-content: center;
-        text-align: center;
-        border: none;
-        background-color: transparent;
-    }
-    .card-img-top {
-        border: none;
-        z-index: 1;
-    }
-    .card-body,
-    .card-header {
-        position: relative;
-        margin-top: -50px;
-        z-index: 2;
-    }
-    .card-non-img {
-        transition: all 0.2s;
-        transform: translateY(0px);
-        z-index:10;
-    }
-    .card-header::before{
+    <style define:vars={{ cardColor }}>
+        .card {
+            border-radius: 20px;
+            overflow: hidden;
+            border: none;
+            background-color: var(--cardColor);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            outline: solid #faece0 5px;
+            width: 100%;
+        }
+        .card-header {
+            justify-content: center;
+            text-align: center;
+            align-content: center;
+            border: none;
+            background-color: transparent;
+            /*margin-bottom: 30px;*/
+            border: none;
+            height: 4lh;
+
+            h3 {
+                line-height: 110%;
+            }
+        }
+        .card-img-top {
+            border: none;
+            z-index: 1;
+        }
+        .card-body,
+        .card-header {
+            position: relative;
+            margin-top: -0px;
+            z-index: 2;
+        }
+        .card-non-img {
+            transition: all 0.2s;
+            transform: translateY(0px);
+            z-index: 10;
+        }
+        .card-header::before {
             transition: all 0.2s;
             content: "";
             display: block;
             position: absolute;
             width: 100%;
             left: 0;
-            top: -10px;
+            top: -0px;
             height: 900px;
-            background-color: rgba(255,126, 121, 0.5);
-            backdrop-filter: blur(10px);
+            background-color: rgba(255, 126, 121, 1);
             transform: skewY(-5deg) scale(1.1);
-            transform-origin: top ;
+            transform-origin: top left;
             z-index: -1;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
-        
-    }
-    .card-header {
-        margin-bottom: 30px;
-        border:none;
-    }
-    .card-body {
-        font-size: x-large;
-        border:none;
-    }
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+            border-top: solid 5px #faece0;
+        }
+        .card-body {
+            font-size: x-large;
+            border: none;
+            padding: 0px;
+        }
 
-    @media screen and (min-width: 768px) {
-		.card {
-			max-width: 400px;
-		}
-	}
-</style>
+        @media screen and (min-width: 992px) {
+            .card {
+                max-width: 400px;
+            }
+        }
+        @media screen and (max-width: 1200px) and (min-width: 992px) {
+            .card {
+                h3{
+                    font-size: 1.2em;
+                }
+            }
+        }
+    </style>
+</div>

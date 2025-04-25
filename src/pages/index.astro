@@ -4,6 +4,9 @@ import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 import Scene3D from "../components/Scene3D.astro";
 import escena from "../assets/greenleaf_comp.glb";
+import card1 from "../assets/card1.svg?raw";
+import card2 from "../assets/card2.svg?raw";
+import card3 from "../assets/card3.svg?raw";
 
 const focus_content = "Our focus".split("");
 const approach_content = "Our approach".split("");
@@ -37,34 +40,25 @@ const team_spans = team_content
 					<h1><Fragment set:html={focus_spans} /></h1>
 				</div>
 				<div class="row">
-					<h3>Pequeña frase sobre our focus bla bla bla</h3>
+					<h3>
+						We aim to provide next-generation biobactericides by
+						engineering natural killers of bacteria
+					</h3>
 				</div>
 				<div class="row cards">
-					<div class="col-md-4">
-						<Card>
-							<img
-								src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/800px-Placeholder_view_vector.svg.png"
-								alt="Card image"
-								class="card-img-top"
-							/>
+					<div class="card-col col-lg-3">
+						<Card title="Pre-harvest loss">
+							<Fragment set:html={card1} />
 						</Card>
 					</div>
-					<div class="col-md-4">
-						<Card>
-							<img
-								src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/800px-Placeholder_view_vector.svg.png"
-								alt="Card image"
-								class="card-img-top"
-							/>
+					<div class="card-col col-lg-3">
+						<Card title="Post-harvest storage spoilage">
+							<Fragment set:html={card2} />
 						</Card>
 					</div>
-					<div class="col-md-4">
-						<Card>
-							<img
-								src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/800px-Placeholder_view_vector.svg.png"
-								alt="Card image"
-								class="card-img-top"
-							/>
+					<div class="card-col col-lg-3">
+						<Card title="Foodborne disease">
+							<Fragment set:html={card3} />
 						</Card>
 					</div>
 				</div>
@@ -84,14 +78,14 @@ const team_spans = team_content
 				<div class="row">
 					<div
 						id="our-approach-text"
-						class="col-lg-6 align-self-center"
+						class="col-xxl-6 align-self-center"
 					>
 						<h3>
 							Contenido a la izquierda en una columna que ocupa la
 							mayoría del espacio disponible
 						</h3>
 					</div>
-					<div class="col-lg-6 mt-5">
+					<div class="col-xxl-6 mt-5">
 						<div id="model3d">
 							<Scene3D glbPath={escena} camera="Camera" />
 						</div>
@@ -112,23 +106,30 @@ const team_spans = team_content
 
 <style>
 	#our-focus {
-		background: linear-gradient(to right, #ffe2c9, white);
+		background: linear-gradient(to right, #faece0, white);
 	}
 	#our-approach {
-		background: linear-gradient(to right, #ffbfbd, #faece0);
+		background: linear-gradient(to right, #ff9e9a, #faece0);
 	}
 	#team {
-		background: linear-gradient(to right, #ffe2c9, white);
+		background: linear-gradient(to right, #faece0, white);
 		z-index: 5;
 	}
 	.cards {
 		margin-top: 50px;
-		.col-md-4 {
+		justify-content: center;
+
+		.card-col {
 			justify-items: center;
+			position: relative;
+		}
+
+		path {
+			transition: transform 0.2s;
 		}
 	}
 
-	.cards .col-md-4 + .col-md-4 {
+	.cards .card-col + .card-col {
 		margin-top: 50px;
 	}
 
@@ -136,17 +137,43 @@ const team_spans = team_content
 		height: 70vh;
 		border-radius: 20px;
 		position: relative;
-		overflow: hidden;
-		z-index: 1 !important;
+		overflow: visible;
+		z-index: -10 !important;
 	}
 
-	@media screen and (min-width: 768px) {
-		.cards .col-md-4 + .col-md-4 {
-			margin-top: 0px;
+	@media screen and (min-width: 992px) {
+		.card-col {
+			/* width: 22vw; */
 		}
+		.cards .card-col + .card-col {
+			margin-top: 0px;
 
+			&::before {
+				content: "▷";
+				text-indent: 5px;
+				display: block;
+				position: absolute;
+				top: 50%;
+				left: 0;
+				width: 100px;
+				height: 100px;
+				border-radius: 100%;
+				background: #ff9e9a;
+				color: #faece0;
+				text-align: center;
+				font-size: 50px;
+				z-index: 50;
+				transform: translateY(-50%) translateX(-50%);
+				outline: solid #faece0 5px;
+				align-content: center;
+				text-box-trim: trim-start;
+			}
+		}
+	}
+
+	@media screen and (min-width: 1400px) {
 		#our-approach {
-			background: linear-gradient(to right, #ffbfbd 60%, #faece0 90%);
+			background: linear-gradient(to right, #ff7e79 50%, #faece0 90%);
 		}
 
 		.our-approach-bg {
@@ -161,7 +188,6 @@ const team_spans = team_content
 			z-index: 3;
 			transform: skewX(-10deg);
 			transform-origin: top;
-			box-shadow: 50px 0px 50px rgba(0, 0, 0, 0.1);
 		}
 		#our-approach-bg-1 {
 			z-index: 3;
@@ -171,11 +197,11 @@ const team_spans = team_content
 		#our-approach-bg-2 {
 			z-index: 2;
 			left: -50px;
-			background: #ffeae0;
+			background: #ffdac5;
 		}
 		#our-approach-bg-3 {
 			z-index: 1;
-			background: #ffdad3;
+			background: #ffb8a6;
 		}
 		#our-approach-contents {
 			z-index: 4;
@@ -187,7 +213,37 @@ const team_spans = team_content
 <script>
 	import { animate, onScroll, stagger } from "../scripts/anime.esm.min";
 	document.addEventListener("astro:page-load", () => {
-		
+		let mouseX = 0;
+		let mouseY = 0;
+		let targetX = 0;
+		let targetY = 0;
+		const parallaxIntensity = 0.001;
+		const easing = 0.05; // Adjust easing for smoother transitions
+
+		document.addEventListener("mousemove", (event) => {
+			// Center the translation at half the screen
+			targetX = event.clientX - window.innerWidth / 2;
+			targetY = event.clientY - window.innerHeight / 2;
+		});
+
+		function animateParallax() {
+			// Smoothly interpolate mouse position
+			mouseX += (targetX - mouseX) * easing;
+			mouseY += (targetY - mouseY) * easing;
+
+			document.querySelectorAll(".card path, .card g").forEach((path) => {
+				let depth = path.getAttribute("data-depth");
+				if (depth !== null) {
+					let x = mouseX * depth * parallaxIntensity;
+					let y = mouseY * depth * parallaxIntensity;
+					path.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+				}
+			});
+
+			requestAnimationFrame(animateParallax);
+		}
+		// Start the animation loop
+		animateParallax();
 
 		document
 			.querySelectorAll(".section-contents")
@@ -242,6 +298,10 @@ const team_spans = team_content
 		animate(".our-approach-bg", {
 			x: ["-100%", "0%"],
 			skewX: ["-10deg", "-10deg"],
+			boxShadow: [
+				"50px 0px 50px rgba(0, 0, 0, 0.1)",
+				"20px 0px 20px rgba(0, 0, 0, 0.1)",
+			],
 			duration: 1000,
 			delay: stagger(-200),
 			autoplay: onScroll({

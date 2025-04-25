@@ -42,7 +42,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 	document.addEventListener("DOMContentLoaded", () => {
 		const video = document.getElementById("video");
 		const logoContainer = document.getElementById("logo-container");
-		const logo = document.getElementsByTagName("svg")[0];
+		const logo = document.getElementById("svg-logo");
 		const paths = [...logo.getElementsByTagName("path")];
 		const G = logo.getElementById("G");
 		const G_stroke = logo.getElementById("G-stroke");
@@ -103,7 +103,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 </script>
 
 <style is:global>
-	svg {
+	#svg-logo {
 		width: 70vh;
 		max-width: 75vw;
 		height: auto;
