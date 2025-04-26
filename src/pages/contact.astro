@@ -23,7 +23,7 @@ import Layout from "../layouts/Layout.astro";
 								type="text"
 								class="form-control"
 								id="first-name"
-								name="first-name"
+								name="firstname"
 								placeholder="First Name"
 								required
 							/>
@@ -36,8 +36,8 @@ import Layout from "../layouts/Layout.astro";
 							<input
 								type="text"
 								class="form-control"
-								id="last-name"
-								name="last-name"
+								id="lastname"
+								name="lastname"
 								placeholder="Last Name"
 								required
 							/>
@@ -79,6 +79,42 @@ import Layout from "../layouts/Layout.astro";
 	</div>
 </Layout>
 
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const form = document.getElementById("contact-form");
+		const BASE_URL = `${window.location.protocol}//${window.location.hostname}:4000`; // Base URL with port
+
+		form.addEventListener("submit", function (event) {
+			event.preventDefault();
+			const formData = new FormData(form);
+			const jsonData = Object.fromEntries(formData.entries());
+			// Remove port if present
+			console.log(BASE_URL);
+			fetch(`${BASE_URL}/api/contact`, {
+				method: "POST",
+				body: JSON.stringify(jsonData), // Send JSON data
+				headers: {
+					"Content-Type": "application/json", // Set the correct content type
+				},
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					if (data.success) {
+						alert("Message sent successfully!");
+						form.reset();
+					} else {
+						alert("Error sending message. Please try again.");
+						console.error("Error:", data.error);
+					}
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+					alert("Error sending message. Please try again.");
+				});
+		});
+	});
+</script>
+
 <style>
 	form {
 		width: 100%;
@@ -99,7 +135,6 @@ import Layout from "../layouts/Layout.astro";
 		border-radius: 2rem !important;
 		padding: 20px;
 	}
-
 
 	button {
 		text-align: center;
