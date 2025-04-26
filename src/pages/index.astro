@@ -220,30 +220,52 @@ const team_spans = team_content
 		const parallaxIntensity = 0.001;
 		const easing = 0.05; // Adjust easing for smoother transitions
 
-		document.addEventListener("mousemove", (event) => {
-			// Center the translation at half the screen
-			targetX = event.clientX - window.innerWidth / 2;
-			targetY = event.clientY - window.innerHeight / 2;
-		});
+		// Detect if the user is on a mobile device
+		const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-		function animateParallax() {
-			// Smoothly interpolate mouse position
-			mouseX += (targetX - mouseX) * easing;
-			mouseY += (targetY - mouseY) * easing;
+		// Function to apply transformations
+		function applyTransformations(x, y) {
+			document
+				.querySelectorAll(".card path, .card g")
+				.forEach((element) => {
+					let depth = element.getAttribute("data-depth");
+					if (depth) {
+						let transformX = x * depth * parallaxIntensity;
+						let transformY = y * depth * parallaxIntensity;
+						element.style.transform = `translate3d(${transformX}px, ${transformY}px, 0)`;
+					}
+				});
+		}
 
-			document.querySelectorAll(".card path, .card g").forEach((path) => {
-				let depth = path.getAttribute("data-depth");
-				if (depth !== null) {
-					let x = mouseX * depth * parallaxIntensity;
-					let y = mouseY * depth * parallaxIntensity;
-					path.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-				}
+		if (isMobile) {
+			// Use device orientation for tilt effect on mobile
+			window.addEventListener("deviceorientation", (event) => {
+				console.log(event);
+				const tiltX = event.gamma==null? 0:event.gamma; // Left-to-right tilt in degrees
+				const tiltY = event.beta==null? 0:event.beta; // Front-to-back tilt in degrees
+				applyTransformations(tiltX * 10, tiltY * 10); // Adjust intensity for tilt
+			});
+		} else {
+			// Use mouse movement for parallax effect on desktop
+			document.addEventListener("mousemove", (event) => {
+				// Center the translation at half the screen
+				targetX = event.clientX - window.innerWidth / 2;
+				targetY = event.clientY - window.innerHeight / 2;
 			});
 
-			requestAnimationFrame(animateParallax);
+			function animateParallax() {
+				// Smoothly interpolate mouse position
+				mouseX += (targetX - mouseX) * easing;
+				mouseY += (targetY - mouseY) * easing;
+
+				applyTransformations(mouseX, mouseY);
+
+				requestAnimationFrame(animateParallax);
+			}
+
+			// Start the animation loop
+			animateParallax();
 		}
-		// Start the animation loop
-		animateParallax();
 
 		document
 			.querySelectorAll(".section-contents")
