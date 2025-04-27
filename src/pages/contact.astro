@@ -8,72 +8,144 @@ import Layout from "../layouts/Layout.astro";
 		<section id="contact" class="page-section">
 			<div class="section-contents container-fluid">
 				<div class="row section-title">
-					<h1>Contact</h1>
+					<h1>Contact Us</h1>
 				</div>
 				<div class="row">
-					<h3>
-						Get in touch to discuss how we can optimise your
-						bio-manufacturing process PENDIENTE
-					</h3>
+					<p class="lead text-center mb-5">
+						Get in touch to discuss how we can optimize your
+						bio-manufacturing process and help your business grow
+						sustainably.
+					</p>
 				</div>
-				<form id="contact-form" class="row">
-					<div class="col-md-6">
-						<div class="form-floating mb-3">
-							<input
-								type="text"
-								class="form-control"
-								id="first-name"
-								name="firstname"
-								placeholder="First Name"
-								required
-							/>
-							<label for="first-name">First Name (required)</label
+
+				<div class="form-container">
+					<!-- Form status messages -->
+					<div
+						id="form-success"
+						class="alert alert-success"
+						role="alert"
+						style="display: none;"
+					>
+						Thank you! Your message has been sent successfully.
+						We'll be in touch shortly.
+					</div>
+					<div
+						id="form-error"
+						class="alert alert-danger"
+						role="alert"
+						style="display: none;"
+					>
+						There was a problem sending your message. Please try
+						again or contact us directly.
+					</div>
+
+					<form
+						id="contact-form"
+						class="row g-3 needs-validation"
+						novalidate
+					>
+						<div class="col-md-6">
+							<div class="form-floating mb-3">
+								<input
+									type="text"
+									class="form-control"
+									id="firstname"
+									name="firstname"
+									placeholder="First Name"
+									required
+									minlength="2"
+								/>
+								<label for="firstname"
+									>First Name <span class="text-danger"
+										>*</span
+									></label
+								>
+								<div class="invalid-feedback">
+									Please enter your first name.
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-floating mb-3">
+								<input
+									type="text"
+									class="form-control"
+									id="lastname"
+									name="lastname"
+									placeholder="Last Name"
+									required
+									minlength="2"
+								/>
+								<label for="lastname"
+									>Last Name <span class="text-danger">*</span
+									></label
+								>
+								<div class="invalid-feedback">
+									Please enter your last name.
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-floating mb-3">
+								<input
+									type="email"
+									class="form-control"
+									id="email"
+									name="email"
+									placeholder="name@example.com"
+									required
+								/>
+								<label for="email"
+									>Email Address <span class="text-danger"
+										>*</span
+									></label
+								>
+								<div class="invalid-feedback">
+									Please enter a valid email address.
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-floating mb-3">
+								<textarea
+									class="form-control"
+									id="message"
+									name="message"
+									placeholder="Your message"
+									style="height: 150px"
+									required
+									minlength="10"></textarea>
+								<label for="message"
+									>Your Message <span class="text-danger"
+										>*</span
+									></label
+								>
+								<div class="invalid-feedback">
+									Please enter your message (minimum 10
+									characters).
+								</div>
+							</div>
+						</div>
+						<div class="col-12 text-center">
+							<button
+								type="submit"
+								id="submit-button"
+								class="btn btn-primary"
 							>
+								<span>Send Message</span>
+								<div
+									class="spinner-border spinner-border-sm ms-2"
+									role="status"
+									style="display: none;"
+								>
+									<span class="visually-hidden"
+										>Loading...</span
+									>
+								</div>
+							</button>
 						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-floating mb-3">
-							<input
-								type="text"
-								class="form-control"
-								id="lastname"
-								name="lastname"
-								placeholder="Last Name"
-								required
-							/>
-							<label for="last-name">Last Name (required)</label>
-						</div>
-					</div>
-					<div class="col-12">
-						<div class="form-floating mb-3">
-							<input
-								type="email"
-								class="form-control"
-								id="email"
-								name="email"
-								placeholder="name@example.com"
-								required
-							/>
-							<label for="email">Email (required)</label>
-						</div>
-					</div>
-					<div class="col-12">
-						<div class="mb-3">
-							<textarea
-								class="form-control t"
-								id="message"
-								name="message"
-								placeholder="Your message"
-								rows="5"
-								required></textarea>
-						</div>
-					</div>
-					<div class="col-12 text-center">
-						<button type="submit" class="btn btn-primary"
-							>Send</button
-						>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
 		</section>
 	</div>
@@ -83,74 +155,236 @@ import Layout from "../layouts/Layout.astro";
 	document.addEventListener("astro:page-load", function () {
 		// Only run this code for the contact page
 		if (window.location.pathname !== "/greenleaf/contact") return;
-		const form = document.getElementById("contact-form");
-		const BASE_URL = `${window.location.protocol}//${window.location.hostname}:4000`; // Base URL with port
 
+		const form = document.getElementById("contact-form");
+		const submitButton = document.getElementById("submit-button");
+		const spinner = submitButton.querySelector(".spinner-border");
+		const submitText = submitButton.querySelector("span");
+		const formSuccess = document.getElementById("form-success");
+		const formError = document.getElementById("form-error");
+		const BASE_URL = `${window.location.protocol}//${window.location.hostname}:4000`;
+
+		// Form validation and submission
 		form.addEventListener("submit", function (event) {
 			event.preventDefault();
+
+			// Clear previous status messages
+			formSuccess.style.display = "none";
+			formError.style.display = "none";
+
+			// Client-side form validation
+			if (!form.checkValidity()) {
+				event.stopPropagation();
+				form.classList.add("was-validated");
+				return;
+			}
+
+			// Update button state to show loading
+			submitButton.disabled = true;
+			spinner.style.display = "inline-block";
+			submitText.textContent = "Sending...";
+
+			// Get form data
 			const formData = new FormData(form);
 			const jsonData = Object.fromEntries(formData.entries());
+
+			// Send form data to server
 			fetch(`${BASE_URL}/api/contact`, {
 				method: "POST",
-				body: JSON.stringify(jsonData), // Send JSON data
+				body: JSON.stringify(jsonData),
 				headers: {
-					"Content-Type": "application/json", // Set the correct content type
+					"Content-Type": "application/json",
 				},
 			})
-				.then((response) => response.json())
+				.then(async (response) => {
+					// Always parse the JSON, even for error responses
+					const data = await response.json();
+
+					// Add status to the data object for handling in the next step
+					return { ...data, status: response.status };
+				})
 				.then((data) => {
 					if (data.success) {
-						alert("Message sent successfully!");
+						// Show success message
+						formSuccess.style.display = "block";
 						form.reset();
+						form.classList.remove("was-validated");
+
+						// Scroll to success message
+						formSuccess.scrollIntoView({
+							behavior: "smooth",
+							block: "center",
+						});
 					} else {
-						alert("Error sending message. Please try again.");
-						console.error("Error:", data.error);
+						// Show appropriate error message based on status code
+						let errorMessage =
+							data.message ||
+							"Error sending message. Please try again.";
+
+						// Set specific message based on status code if needed
+						if (data.status === 400) {
+							// This is a validation error, use the server's message
+							formError.textContent = errorMessage;
+						} else if (data.status === 429) {
+							formError.textContent =
+								"Too many requests. Please try again later.";
+						} else if (data.status >= 500) {
+							formError.textContent =
+								"Server error. Please try again later.";
+						} else {
+							formError.textContent = errorMessage;
+						}
+
+						formError.style.display = "block";
+						console.error("Form submission error:", data);
+
+						// Scroll to error message
+						formError.scrollIntoView({
+							behavior: "smooth",
+							block: "center",
+						});
 					}
 				})
 				.catch((error) => {
-					console.error("Error:", error);
-					alert("Error sending message. Please try again.");
+					// This will only trigger for network errors or JSON parsing failures
+					formError.textContent =
+						"Connection error. Please check your internet connection and try again.";
+					formError.style.display = "block";
+					console.error("Network error:", error);
+
+					// Scroll to error message
+					formError.scrollIntoView({
+						behavior: "smooth",
+						block: "center",
+					});
+				})
+				.finally(() => {
+					// Reset button state
+					submitButton.disabled = false;
+					spinner.style.display = "none";
+					submitText.textContent = "Send Message";
 				});
+		});
+
+		// Real-time validation feedback (optional)
+		const inputs = form.querySelectorAll("input, textarea");
+		inputs.forEach((input) => {
+			input.addEventListener("blur", function () {
+				if (this.checkValidity()) {
+					this.classList.add("is-valid");
+					this.classList.remove("is-invalid");
+				} else if (this.value !== "") {
+					this.classList.add("is-invalid");
+					this.classList.remove("is-valid");
+				}
+			});
 		});
 	});
 </script>
 
 <style>
-	form {
-		width: 100%;
-		max-width: 600px;
+	.section-title h1 {
+		margin-bottom: 2rem;
+		position: relative;
+		text-align: center;
+	}
+
+	.lead {
+		font-size: 1.25rem;
+		color: #555;
+	}
+
+	.form-container {
+		max-width: 800px;
 		margin: 0 auto;
+		padding: 2rem;
+		border-radius: 1rem;
+		background-color: #fff;
+		box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+	}
+
+	.form-floating label {
+		color: #666;
 	}
 
 	.form-control {
-		border-radius: 99px;
-		&:focus {
-			box-shadow: 0 0 0 0.2rem rgba(222, 154, 151, 0.25);
-			border-color: #de9a97;
+		border-radius: 0.5rem;
+		border: 1px solid #ddd;
+		padding: 1rem;
+		transition: all 0.3s ease;
+	}
+
+	.form-control:focus {
+		box-shadow: 0 0 0 0.25rem rgba(255, 126, 121, 0.25);
+		border-color: #ff7e79;
+	}
+
+	.form-control.is-valid {
+		border-color: #198754;
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+		background-repeat: no-repeat;
+		background-position: right calc(0.375em + 0.1875rem) center;
+		background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+	}
+
+	textarea.form-control {
+		border-radius: 0.5rem;
+		min-height: 150px;
+		resize: vertical;
+	}
+
+	.btn-primary {
+		background-color: #ff7e79;
+		border: none;
+		border-radius: 50px;
+		padding: 0.75rem 2rem;
+		font-weight: 600;
+		letter-spacing: 0.5px;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	.btn-primary:hover {
+		background-color: #e66e69;
+		transform: translateY(-2px);
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+	}
+
+	.btn-primary:active {
+		transform: translateY(0);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.btn-primary:disabled {
+		background-color: #ffa6a2;
+		cursor: not-allowed;
+	}
+
+	.alert {
+		border-radius: 0.5rem;
+		padding: 1rem;
+		margin-bottom: 1.5rem;
+		animation: fadeIn 0.5s ease-in-out;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(-20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
 		}
 	}
 
-	textarea {
-		height: 200px;
-		border-radius: 2rem !important;
-		padding: 20px;
-	}
+	@media (max-width: 768px) {
+		.form-container {
+			padding: 1.5rem;
+		}
 
-	button {
-		text-align: center;
-		justify-content: center;
-		width: 100%;
-		border-radius: 99px !important;
-		background: #ff7e79;
-		color: #fff;
-		padding: 10px 20px;
-		border: none;
-		border-radius: 5px;
-		font-size: 1.5rem;
-		cursor: pointer;
-	}
-
-	button:hover {
-		background: #333;
+		.btn-primary {
+			width: 100%;
+		}
 	}
 </style>

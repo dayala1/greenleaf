@@ -4,6 +4,10 @@
     src: url('/greenleaf/fonts/Fredoka-Variable.ttf') format('truetype');
 }
 
+html {
+    overflow-y: scroll;
+}
+
 section+section {
     outline: 5px solid #ff7e79;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);

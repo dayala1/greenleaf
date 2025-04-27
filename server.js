@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import validator from 'validator';
+import rateLimit from 'express-rate-limit';
+import hpp from 'hpp';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -29,18 +32,55 @@ if (ENV === 'development') {
 
 // Parse JSON requests
 app.use(express.json());
- 
+
+app.use(hpp());
+
+// Rate limiting to prevent abuse
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per window
+  standardHeaders: true,
+  message: { success: false, message: 'Too many requests, please try again later.' }
+});
+app.use('/api/', limiter);
+
 // Routes
-app.post('/api/contact', (req, res) => {
-  const { firstname, lastname, email, message } = req.body;
+app.post('/api/contact', (req, res, next) => {
+  try {
+    const { firstname, lastname, email, message } = req.body;
 
-  // Basic validation
-  if (!firstname || !lastname || !email || !message) {
-    return res.status(400).json({ success: false, message: 'All fields are required.' });
+    if (!firstname || !lastname || !email || !message) {
+      return res.status(400).json({ success: false, message: 'All fields are required.' });
+    }
+
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ success: false, message: 'Invalid email address.' });
+    }
+
+    if (validator.isEmpty(message.trim())) {
+      return res.status(400).json({ success: false, message: 'Message cannot be empty.' });
+    }
+
+    // Process the request
+    console.log(`Name: ${firstname} ${lastname}, Email: ${email}, Message: ${message}`);
+    res.json({ success: true, message: 'Form submitted successfully!' });
+  } catch (error) {
+    next(error); // Pass to error handler
   }
+});
 
-  console.log(`Name: ${firstname} ${lastname}, Email: ${email}, Message: ${message}`);
-  res.json({ success: true, message: 'Form submitted successfully!' });
+// Catch 404s
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: 'Endpoint not found' });
+});
+
+// Add global error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: ENV === 'production' ? 'Internal server error' : err.message
+  });
 });
 
 // Start the server
