@@ -80,7 +80,9 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <script>
-	document.addEventListener("DOMContentLoaded", function () {
+	document.addEventListener("astro:page-load", function () {
+		// Only run this code for the contact page
+		if (window.location.pathname !== "/greenleaf/contact") return;
 		const form = document.getElementById("contact-form");
 		const BASE_URL = `${window.location.protocol}//${window.location.hostname}:4000`; // Base URL with port
 

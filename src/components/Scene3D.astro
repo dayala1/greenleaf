@@ -359,6 +359,8 @@ const { glbPath } = Astro.props;
 
 	// Initialize and run the SceneManager
 	document.addEventListener("astro:page-load", () => {
+		// Only run this code for the index page
+		if (window.location.pathname !== "/greenleaf/") return;
 		const escena = document.getElementById("three-container").dataset.src;
 		const sceneManager = new SceneManager("three-container", escena);
 		sceneManager.init();
