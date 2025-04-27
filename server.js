@@ -29,7 +29,7 @@ if (ENV === 'development') {
 
 // Parse JSON requests
 app.use(express.json());
-
+ 
 // Routes
 app.post('/api/contact', (req, res) => {
   const { firstname, lastname, email, message } = req.body;
