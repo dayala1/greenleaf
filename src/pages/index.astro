@@ -123,6 +123,11 @@ const team_spans = team_content
 			justify-items: center;
 			position: relative;
 		}
+
+		path,
+		g {
+			will-change: transform;
+		}
 	}
 
 	.cards .card-col + .card-col {
@@ -228,7 +233,7 @@ const team_spans = team_content
 					if (depth) {
 						let transformX = x * depth * parallaxIntensity;
 						let transformY = y * depth * parallaxIntensity;
-						element.style.transform = `translate3d(${transformX}px, ${transformY}px, 0)`;
+						element.style.transform = `translate(${transformX}px, ${transformY}px)`;
 					}
 				});
 		}
@@ -236,21 +241,36 @@ const team_spans = team_content
 		if (isMobile) {
 			let tiltX = 0;
 			let tiltY = 0;
+			let lastTiltX = 0;
+			let lastTiltY = 0;
 			let targetTiltX = 0;
 			let targetTiltY = 0;
+			let lastUpdate = Date.now();
+			const throttleInterval = 50; // Update every 50ms
 
 			// Use device orientation for tilt effect on mobile
 			window.addEventListener("deviceorientation", (event) => {
-				targetTiltX = event.gamma == null ? 0 : event.gamma; // Left-to-right tilt in degrees
-				targetTiltY = event.beta == null ? 0 : event.beta; // Front-to-back tilt in degrees
+				const now = Date.now();
+				if (now - lastUpdate >= throttleInterval) {
+					targetTiltX = event.gamma == null ? 0 : event.gamma; // Left-to-right tilt in degrees
+					targetTiltY = event.beta == null ? 0 : event.beta; // Front-to-back tilt in degrees
+					lastUpdate = now;
+				}
 			});
 
 			function animateTilt() {
-				// Smoothly interpolate tilt values
 				tiltX += (targetTiltX - tiltX) * easing;
 				tiltY += (targetTiltY - tiltY) * easing;
 
-				applyTransformations(tiltX * 10, tiltY * 10); // Adjust intensity for tilt
+				// Only update if the change is significant
+				if (
+					Math.abs(tiltX - lastTiltX) > 0.1 ||
+					Math.abs(tiltY - lastTiltY) > 0.1
+				) {
+					applyTransformations(tiltX * 10, tiltY * 10);
+					lastTiltX = tiltX;
+					lastTiltY = tiltY;
+				}
 
 				requestAnimationFrame(animateTilt);
 			}
