@@ -70,6 +70,8 @@ const { glbPath } = Astro.props;
 			this.enableAutoRotate = true; // Enable or disable automatic rotation
 			this.autoRotateSpeed = 0.001; // Speed of the automatic rotation
 			this.rotationAmplitude = 0.05; // Amplitude of the rotation
+			this.lastUpdate = Date.now();
+			this.throttleInterval = 50; // Update every 50ms
 		}
 
 		initPostprocessing() {
@@ -103,7 +105,7 @@ const { glbPath } = Astro.props;
 
 			// Set the renderer size to match the container
 			this.renderer.setSize(containerWidth, containerHeight);
-			this.renderer.setPixelRatio(window.devicePixelRatio*1.5);
+			this.renderer.setPixelRatio(window.devicePixelRatio * 1.5);
 			this.renderer.physicallyCorrectLights = true;
 			// Cast shadows
 			if (this.castShadows) {
@@ -194,6 +196,7 @@ const { glbPath } = Astro.props;
 			const containerWidth = this.container.clientWidth;
 			const containerHeight = this.container.clientHeight;
 			const frustumHeight = this.camera.top - this.camera.bottom;
+
 			if (this.camera && this.camera.isOrthographicCamera) {
 				const aspect = containerWidth / containerHeight;
 				// Calculate the new frustum width based on the aspect ratio
@@ -210,7 +213,7 @@ const { glbPath } = Astro.props;
 			} else if (this.camera) {
 				// Adjust the aspect ratio
 				this.camera.aspect = containerWidth / containerHeight;
-				
+
 				// Update the camera's projection matrix
 				this.camera.updateProjectionMatrix();
 			}
@@ -252,32 +255,35 @@ const { glbPath } = Astro.props;
 		// Handle device orientation for mobile
 		handleDeviceOrientation() {
 			window.addEventListener("deviceorientation", (event) => {
-				const orientation = window.orientation || 0;
-				let rawTiltX = event.gamma; // Left-to-right tilt
-				let rawTiltY = event.beta; // Front-to-back tilt
+				const now = Date.now();
+				if (now - this.lastUpdate >= this.throttleInterval) {
+					const orientation = window.orientation || 0;
+					let rawTiltX = event.gamma; // Left-to-right tilt
+					let rawTiltY = event.beta; // Front-to-back tilt
 
-				// Adjust for typical default angles
-				if (orientation === 0) {
-					rawTiltY -= 90; // Default beta is 90 in portrait mode
-				} else if (orientation === 90) {
-					rawTiltX -= 90; // Default gamma is 90 in landscape-left
-				} else if (orientation === -90) {
-					rawTiltX += 90; // Default gamma is -90 in landscape-right
+					// Adjust for typical default angles
+					if (orientation === 0) {
+						rawTiltY -= 90; // Default beta is 90 in portrait mode
+					} else if (orientation === 90) {
+						rawTiltX -= 90; // Default gamma is 90 in landscape-left
+					} else if (orientation === -90) {
+						rawTiltX += 90; // Default gamma is -90 in landscape-right
+					}
+
+					if (orientation === 90) {
+						this.tiltX = rawTiltY / 45;
+						this.tiltY = -rawTiltX / 45;
+					} else if (orientation === -90) {
+						this.tiltX = -rawTiltY / 45;
+						this.tiltY = rawTiltX / 45;
+					} else {
+						this.tiltX = rawTiltX / 45;
+						this.tiltY = rawTiltY / 45;
+					}
+
+					this.tiltX = Math.max(-1, Math.min(1, this.tiltX));
+					this.tiltY = Math.max(-1, Math.min(1, this.tiltY));
 				}
-
-				if (orientation === 90) {
-					this.tiltX = rawTiltY / 45;
-					this.tiltY = -rawTiltX / 45;
-				} else if (orientation === -90) {
-					this.tiltX = -rawTiltY / 45;
-					this.tiltY = rawTiltX / 45;
-				} else {
-					this.tiltX = rawTiltX / 45;
-					this.tiltY = rawTiltY / 45;
-				}
-
-				this.tiltX = Math.max(-1, Math.min(1, this.tiltX));
-				this.tiltY = Math.max(-1, Math.min(1, this.tiltY));
 			});
 		}
 
