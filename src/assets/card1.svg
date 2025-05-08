@@ -73,20 +73,20 @@
        data-depth="1.5" />
     <path
        id="suelo3"
-       style="font-variation-settings:normal;vector-effect:none;fill:#ffa85c;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
+       style="font-variation-settings:normal;vector-effect:none;fill:#ffe6d0;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
        d="m 42.748295,116.27352 c -0.834129,0.46125 -0.455269,1.39837 -0.455269,1.39837 0,0 -0.268051,-0.41215 -1.046965,-0.076 0.209536,1.11089 1.279509,1.14619 1.279509,1.14619 v 1.83399 c -5.686951,1.71523 -11.127059,4.6814 -14.154692,8.35143 l 27.147988,0.0329 v -10.15649 c -2.71437,0.11136 -9.646752,0.80093 -12.548362,1.64094 v -1.70273 c 0,0 1.069972,-0.0353 1.279508,-1.14619 -0.778914,-0.3362 -1.046964,0.076 -1.046964,0.076 0,-1e-5 0.379376,-0.93712 -0.454753,-1.39837 z"
        inkscape:label="suelo3"
        sodipodi:nodetypes="cccccccccccccc"
        data-depth="2" />
     <path
-       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#ff8144;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#ffcea2;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
        d="m 29.713746,130.56422 c 4.648189,-5.63443 15.557875,-10.00895 25.997897,-9.94655 l 3e-6,10.15639 z"
        id="suelo2"
        sodipodi:nodetypes="cccc"
        inkscape:label="suelo2"
        data-depth="2.5" />
     <path
-       style="font-variation-settings:normal;opacity:1;fill:#ff5136;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       style="font-variation-settings:normal;opacity:1;fill:#ffbc80;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
        d="m 30.888866,132.20099 c 4.648189,-5.63443 16.486879,-10.23015 25.997897,-9.94655 l 3e-6,10.15639 z"
        id="suelo1"
        sodipodi:nodetypes="cccc"
