@@ -5,8 +5,11 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 
 <div id="header">
 	<div id="header-center">
-		<div id="logo-container" ">
+		<div id="logo-container">
 			<Fragment set:html={logoRaw} />
+		</div>
+		<div id="messages-container">
+			<div id="message" class="message">Greenleaf is redefining how we protect crops in a changing world</div>
 		</div>
 		<a href="#our-focus"
 			><div id="scroll-button"><span id="triangle"></span></div></a
@@ -42,6 +45,8 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 	document.addEventListener("DOMContentLoaded", () => {
 		const video = document.getElementById("video");
 		const logoContainer = document.getElementById("logo-container");
+		const messagesContainer = document.getElementById("messages-container");
+		const message = document.getElementById("message");
 		const logo = document.getElementById("svg-logo");
 		const paths = [...logo.getElementsByTagName("path")];
 		const G = logo.getElementById("G");
@@ -59,16 +64,50 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		const letters = [R, E1, E2, N, L, E3, A, F];
 		const scrollButton = document.getElementById("scroll-button");
 
-		// When the video ends, update the UI
+		// Pause video at 4 seconds, show message, then resume
+		if (video && messagesContainer) {
+			video.addEventListener("timeupdate", function () {
+				if (
+					video.currentTime >= 4.1 &&
+					!video.paused &&
+					!video.hasShownMessage
+				) {
+					// Mark that we've shown the message to avoid repeats
+					video.hasShownMessage = true;
 
+					// Pause the video
+					video.pause();
+
+					// Add blur class to video and scroll button
+					video.classList.add("blurred");
+					scrollButton.classList.add("blurred");
+
+					// Display message
+					messagesContainer.classList.add("visible");
+
+					// After some seconds, hide message and resume video
+					setTimeout(() => {
+						messagesContainer.classList.remove("visible");
+						video.classList.remove("blurred");
+						scrollButton.classList.remove("blurred");
+
+						// Wait for the fade out animation before playing
+						setTimeout(() => {
+							video.play();
+						}, 2500);
+					}, 7000);
+				}
+			});
+		}
+
+		// When the video ends, update the UI
 		if (video && logoContainer && scrollButton) {
 			video.addEventListener("ended", () => {
 				// Show the logo
 				logoContainer.classList.add("played");
-				// add "played" class to scroll button
-				// scrollButton.classList.add("played");
-				// Update the scroll button
-				// scrollButton.innerHTML = "Discover More";
+				message.textContent =
+					"Making smarter crop protectants for smarter growers";
+				messagesContainer.classList.add("visible");
 				// Play logo animation
 				animate(svg.createDrawable(G_stroke), getDrawConfig(2000, 0));
 				animate(
@@ -88,12 +127,12 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 					onComplete: () => {
 						[G, ...letters].forEach((letter, i) => {
 							animate(letter, {
-							translateY: [0, -5, 0],
-							loop: true,
-							ease: 'inOutSine',
-							delay: i * 100,
-							duration: 3000
-						});
+								translateY: [0, -5, 0],
+								loop: true,
+								ease: "inOutSine",
+								delay: i * 100,
+								duration: 3000,
+							});
 						});
 					},
 				});
@@ -119,7 +158,6 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 </style>
 
 <style>
-	
 	#header {
 		top: 0;
 		left: 0;
@@ -139,6 +177,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		top: 0;
 		left: 0;
 		z-index: -1;
+		transition: filter 2.5s ease;
 	}
 	#logo-container {
 		opacity: 0;
@@ -154,7 +193,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		height: 100vh;
 		position: relative;
 	}
-	
+
 	#header-center {
 		height: 100%;
 		display: flex;
@@ -196,6 +235,14 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 			min-height: 0;
 			padding: 20px;
 		}
+		&.blurred {
+			transition: all 2.5s ease;
+			background-color: rgba(200, 200, 200, 0.1);
+			filter: blur(8px);
+			opacity: 0.5;
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+			transform: scale(1);
+		}
 	}
 	#triangle {
 		position: absolute;
@@ -207,5 +254,37 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		border-left: 40px solid transparent;
 		border-right: 40px solid transparent;
 		border-bottom: 40px solid white;
+	}
+	#messages-container {
+		z-index: 10;
+		width: 100vw;
+		text-align: center;
+		opacity: 0;
+		max-height:0px;
+		transform: translateY(20px);
+		transition: all 2.5s ease;
+		pointer-events: none;
+	}
+
+	#messages-container.visible {
+		opacity: 1;
+		max-height: 100vh;
+		transform: translateY(0);
+	}
+
+	.message {
+		color: #f8ece1;
+		padding: 20px 40px;
+		border-radius: 8px;
+		font-size: 4rem;
+		display: inline-block;
+		font-weight: 600;
+		font-family: 'Fredoka', sans-serif;
+		letter-spacing: 1px;
+		text-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	}
+
+	#video.blurred {
+		filter: blur(8px) brightness(0.7);
 	}
 </style>

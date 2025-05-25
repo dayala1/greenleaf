@@ -8,6 +8,14 @@ import card1 from "../assets/card1.svg?raw";
 import card2 from "../assets/card2.svg?raw";
 import card3 from "../assets/card3.svg?raw";
 
+import approach1 from "../assets/approach1.svg";
+import approach2 from "../assets/approach2.svg";
+import approach3 from "../assets/approach3.svg";
+import approach4 from "../assets/approach4.svg";
+
+import team1 from "../assets/team1.jpg";
+import team2 from "../assets/team2.jpg";
+
 const focus_content = "Our focus".split("");
 const approach_content = "Our approach".split("");
 const team_content = "Team".split("");
@@ -42,7 +50,7 @@ const team_spans = team_content
 				<div class="row">
 					<h3>
 						We aim to provide next-generation biobactericides by
-						engineering natural killers of bacteria
+						engineering natural killers of bacteria.
 					</h3>
 				</div>
 				<div class="row cards">
@@ -81,11 +89,41 @@ const team_spans = team_content
 						class="col-xxl-6 align-self-center"
 					>
 						<h3>
-							Contenido a la izquierda en una columna que ocupa la
-							mayoría del espacio disponible
+							We create next-generation crop protectants using
+							bacteriophages.
 						</h3>
+						<div class="approach-rows">
+							<div class="approach-container">
+								<div class="approach-img"><img src={approach1.src}></img></div>
+							<div class="approach-row">
+								
+								<div class="approach-text">Great <strong>effectiveness</strong></div>
+							</div>
+							</div>
+							<div class="approach-container">
+							<div class="approach-img"><img src={approach2.src}></img></div>
+							<div class="approach-row">
+								
+								<div class="approach-text">High <strong>specificity</strong> for target pathogen</div>
+							</div>
+							</div>
+							<div class="approach-container">
+							<div class="approach-img"><img src={approach3.src}></img></div>
+							<div class="approach-row">
+								
+								<div class="approach-text">No negative effects on <strong>health</strong> or environment</div>
+							</div>
+							</div>
+							<div class="approach-container">
+							<div class="approach-img"><img src={approach4.src}></img></div>
+							<div class="approach-row">
+								
+								<div class="approach-text">Modular architecture allows <strong>engineering</strong></div>
+							</div>
+						</div>
+						</div>
 					</div>
-					<div class="col-xxl-6 mt-5">
+					<div id="model-col" class="col-xxl-6 mt-5">
 						<div id="model3d">
 							<Scene3D glbPath={escena} camera="Camera" />
 						</div>
@@ -98,7 +136,33 @@ const team_spans = team_content
 				<div class="row section-title">
 					<h1><Fragment set:html={team_spans} /></h1>
 				</div>
-				<div class="row"></div>
+				
+				<div class="row justify-content-center">
+					<div class="col-md-5 team-card">
+						<div class="team-card-inner">
+							<div class="team-photo-container">
+								<!-- Replace with actual image later -->
+								<img src={team1.src} alt="Lara Sellés Vidal" class="team-photo" />
+							</div>
+							<div class="team-info">
+								<h3 class="team-name">Lara Sellés Vidal, PhD</h3>
+								<p class="team-role">Co-founder</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-5 team-card">
+						<div class="team-card-inner">
+							<div class="team-photo-container">
+								<!-- Replace with actual image later -->
+								<img src={team2.src} alt="George Taylor" class="team-photo" />
+							</div>
+							<div class="team-info">
+								<h3 class="team-name">George Taylor, PhD</h3>
+								<p class="team-role">Co-founder</p>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</section>
 	</div>
@@ -142,6 +206,160 @@ const team_spans = team_content
 		z-index: -10 !important;
 	}
 
+	.approach-rows {
+		display: flex;
+		flex-direction: column;
+		gap: 60px;
+		margin-top: 50px;
+	}
+	.approach-container {
+		display: flex;
+		position: relative;
+		align-items: center;
+		gap: 20px;
+		font-size: 1.5rem;
+		width: 100%;
+		transition: all 0.3s;
+	}
+	.approach-row {
+		width: 100%;
+		background: #ff7e79;
+		padding: 20px 24px;
+		border: 3px solid #ff7e79;
+		border-radius: 10px 40px 10px 40px;
+		box-shadow: 0 3px 10px rgba(255, 126, 121, 0.1);
+		transition: all 0.3s;
+		position: relative;
+		overflow: hidden;
+
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			transform: translateX(20px);
+			background-color: #faece0;
+			transition: all 0.3s ease;
+			z-index: 1;
+			border-radius: 10px 30px 10px 30px;
+		}
+	}
+
+	.approach-container:hover {
+		transform: translateY(-4px) scale(1.05);
+		
+		
+	}
+	.approach-container:hover .approach-row {
+		border-color: #ff5a54;
+		background-color: #ff5a54;
+		box-shadow: 0 5px 15px rgba(255, 126, 121, 0.2);
+	}
+
+	.approach-text {
+		position: relative;
+		z-index: 2;
+		text-align: center;
+	}
+
+	.approach-img {
+		width: 100px;
+		height: 100px;
+		background-color: #faece0;
+		border: 3px  solid #ff7e79;
+		border-radius: 999px;
+		position: absolute;
+		padding: 0px;
+		top:0px;
+		left: 20px;
+		transform: translateX(-50%) translateY(-50%);
+		z-index: 3;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: visible;
+
+		img {
+			width: 90%;
+			height: auto;
+			z-index: 2
+		}
+	}
+	#model-col{
+		margin-top: 0px !important;
+	}
+
+.team-card {
+    margin-top: 40px;
+    transition: all 0.3s ease;
+}
+
+.team-card-inner {
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.team-card-inner:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.team-photo-container {
+    width: 100%;
+	height: 400px;
+    overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+
+	img {
+		height: 100%;
+		width: 100%;
+		object-fit: cover;
+		object-position: center;
+	}
+}
+
+.team-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #faece0;
+    background-image: linear-gradient(45deg, #ff9e9a 25%, transparent 25%, 
+                      transparent 75%, #ff9e9a 75%, #ff9e9a),
+                      linear-gradient(45deg, #ff9e9a 25%, transparent 25%, 
+                      transparent 75%, #ff9e9a 75%, #ff9e9a);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+}
+
+.team-info {
+    padding: 20px;
+    text-align: center;
+}
+
+.team-name {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.team-role {
+    font-size: 1.1rem;
+    color: #ff7e79;
+    font-weight: 500;
+}
+
+	@media screen and (max-width: 1400px) {
+		.approach-container {
+			transform: none !important;
+		}
+	}
 	@media screen and (min-width: 992px) {
 		.card-col {
 			/* width: 22vw; */
@@ -207,6 +425,9 @@ const team_spans = team_content
 		#our-approach-contents {
 			z-index: 4;
 			position: relative;
+		}
+		.team-card {
+				width: 30%;
 		}
 	}
 </style>
@@ -292,7 +513,7 @@ const team_spans = team_content
 				mouseX += (targetX - mouseX) * easing;
 				mouseY += (targetY - mouseY) * easing;
 
-				applyTransformations(mouseX, mouseY);
+				applyTransformations(mouseX * 0.5, mouseY * 0.5);
 
 				requestAnimationFrame(animateParallax);
 			}
@@ -308,7 +529,6 @@ const team_spans = team_content
 					opacity: [0, 1],
 					translateX: ["-100%", "0%"],
 					duration: 1000,
-					easing: "linear",
 					autoplay: onScroll({
 						enter: "90% top",
 						leave: "40% top",
@@ -319,11 +539,10 @@ const team_spans = team_content
 				animate(section.querySelectorAll("h1 span"), {
 					opacity: [0, 1],
 					translateY: ["-100%", "0%"],
-					"--pseudo-el-before-x": ["-100%", "0%"],
 					duration: 1000,
 					delay: stagger(200),
 					autoplay: onScroll({
-						enter: "90% top",
+						enter: "60% top",
 						leave: "40% top",
 						sync: 0.1,
 					}),
@@ -337,6 +556,17 @@ const team_spans = team_content
 			delay: stagger(200),
 			autoplay: onScroll({
 				enter: "bottom top",
+				leave: "40% top",
+				sync: 0.2,
+			}),
+		});
+		animate(".approach-container", {
+			opacity: [0, 0, 1],
+			x: ["200%", stagger(8)],
+			duration: 1000,
+			delay: stagger(200),
+			autoplay: onScroll({
+				enter: "80% top",
 				leave: "40% top",
 				sync: 0.2,
 			}),
