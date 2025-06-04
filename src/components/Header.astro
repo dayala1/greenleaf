@@ -68,7 +68,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 		if (video && messagesContainer) {
 			video.addEventListener("timeupdate", function () {
 				if (
-					video.currentTime >= 4.1 &&
+					video.currentTime >= 0.1 &&
 					!video.paused &&
 					!video.hasShownMessage
 				) {
@@ -95,7 +95,7 @@ import logoRaw from "../assets/logo_animation.svg?raw";
 						setTimeout(() => {
 							video.play();
 						}, 2500);
-					}, 7000);
+					}, 5000);
 				}
 			});
 		}
