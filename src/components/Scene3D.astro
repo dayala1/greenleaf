@@ -120,7 +120,7 @@ const { glbPath } = Astro.props;
 		// Load the GLTF model and set up the camera
 		loadScene() {
 			const dracoLoader = new DRACOLoader();
-			dracoLoader.setDecoderPath("/greenleaf/draco/");
+			dracoLoader.setDecoderPath("/draco/");
 			const loader = new GLTFLoader();
 			loader.setDRACOLoader(dracoLoader);
 			loader.load(
@@ -360,7 +360,7 @@ const { glbPath } = Astro.props;
 	// Initialize and run the SceneManager
 	document.addEventListener("astro:page-load", () => {
 		// Only run this code for the index page
-		if (window.location.pathname !== "/greenleaf/") return;
+		if (window.location.pathname !== "/") return;
 		const escena = document.getElementById("three-container").dataset.src;
 		const sceneManager = new SceneManager("three-container", escena);
 		sceneManager.init();

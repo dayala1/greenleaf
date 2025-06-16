@@ -10,6 +10,9 @@ const isIndex = url === base;
 const ourFocusHref = isIndex ? `#our-focus` : `${base}#our-focus`;
 const ourApproachHref = isIndex ? `#our-approach` : `${base}#our-approach`;
 const teamHref = isIndex ? `#team` : `${base}#team`;
+const supportedByHref = isIndex
+    ? `#supported-by`
+    : `${base}#supported-by`;
 ---
 
 <nav id="menu" class="navbar fixed-top navbar-expand-lg justify-content-center">
@@ -40,6 +43,9 @@ const teamHref = isIndex ? `#team` : `${base}#team`;
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href=`${teamHref}`>Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href=`${supportedByHref}`>Support</a>
                 </li>
                 <li id="contact-button" class="nav-item">
                     <a class="nav-link" href=`${base}contact#contact`>Contact</a

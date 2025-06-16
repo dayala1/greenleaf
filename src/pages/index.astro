@@ -16,9 +16,16 @@ import approach4 from "../assets/approach4.svg";
 import team1 from "../assets/team1.jpg";
 import team2 from "../assets/team2.jpg";
 
-const focus_content = "Our focus".split("");
+import support1 from "../assets/support1.png";
+import support2 from "../assets/support2.png";
+import support3 from "../assets/support3.png";
+import support4 from "../assets/support4.png";
+import support5 from "../assets/support5.png";
+
+const focus_content = "Our Mission".split("");
 const approach_content = "Our approach".split("");
 const team_content = "Team".split("");
+const supported_by_content = "Supported by".split("");
 const focus_spans = focus_content
 	.map((letter, index) => {
 		return `<span class="letter letter-${index}">${letter}</span>`;
@@ -30,6 +37,11 @@ const approach_spans = approach_content
 	})
 	.join("");
 const team_spans = team_content
+	.map((letter, index) => {
+		return `<span class="letter letter-${index}">${letter}</span>`;
+	})
+	.join("");
+const supported_by_spans = supported_by_content
 	.map((letter, index) => {
 		return `<span class="letter letter-${index}">${letter}</span>`;
 	})
@@ -49,18 +61,17 @@ const team_spans = team_content
 				</div>
 				<div class="row">
 					<h3>
-						We aim to provide next-generation biobactericides by
-						engineering natural killers of bacteria.
+						To ensure global food security by revolutionising sustainable disease management for crops.
 					</h3>
 				</div>
 				<div class="row cards">
 					<div class="card-col col-lg-3">
-						<Card title="Pre-harvest loss">
+						<Card title="In the field">
 							<Fragment set:html={card1} />
 						</Card>
 					</div>
 					<div class="card-col col-lg-3">
-						<Card title="Post-harvest storage spoilage">
+						<Card title="During storage">
 							<Fragment set:html={card2} />
 						</Card>
 					</div>
@@ -97,28 +108,28 @@ const team_spans = team_content
 								<div class="approach-img"><img src={approach1.src}></img></div>
 							<div class="approach-row">
 								
-								<div class="approach-text">Great <strong>effectiveness</strong></div>
+								<div class="approach-text">Effective</div>
 							</div>
 							</div>
 							<div class="approach-container">
 							<div class="approach-img"><img src={approach2.src}></img></div>
 							<div class="approach-row">
 								
-								<div class="approach-text">High <strong>specificity</strong> for target pathogen</div>
+								<div class="approach-text">Specific to target disease</div>
 							</div>
 							</div>
 							<div class="approach-container">
 							<div class="approach-img"><img src={approach3.src}></img></div>
 							<div class="approach-row">
 								
-								<div class="approach-text">No negative effects on <strong>health</strong> or environment</div>
+								<div class="approach-text">Non-toxic to humans and the environment</div>
 							</div>
 							</div>
 							<div class="approach-container">
 							<div class="approach-img"><img src={approach4.src}></img></div>
 							<div class="approach-row">
 								
-								<div class="approach-text">Modular architecture allows <strong>engineering</strong></div>
+								<div class="approach-text">Modular architecture enables engineering</div>
 							</div>
 						</div>
 						</div>
@@ -145,7 +156,7 @@ const team_spans = team_content
 								<img src={team1.src} alt="Lara Sellés Vidal" class="team-photo" />
 							</div>
 							<div class="team-info">
-								<h3 class="team-name">Lara Sellés Vidal, PhD</h3>
+								<h3 class="team-name">Lara Sellés Vidal, PhD <a target="_blank" href="https://linkedin.com/in/lara-selles-vidal"><i class="fa-brands fa-linkedin"/></a></h3>
 								<p class="team-role">Co-founder</p>
 							</div>
 						</div>
@@ -157,7 +168,7 @@ const team_spans = team_content
 								<img src={team2.src} alt="George Taylor" class="team-photo" />
 							</div>
 							<div class="team-info">
-								<h3 class="team-name">George Taylor, PhD</h3>
+								<h3 class="team-name">George Taylor, PhD <a target="_blank" href="https://linkedin.com/in/gm-taylor"><i class="fa-brands fa-linkedin"/></a></h3>
 								<p class="team-role">Co-founder</p>
 							</div>
 						</div>
@@ -165,6 +176,41 @@ const team_spans = team_content
 				</div>
 			</div>
 		</section>
+		<section id="supported-by" class="page-section">
+		<div id="supported-by-contents" class="section-contents container-fluid">
+			<div class="row section-title">
+				<h1><Fragment set:html={supported_by_spans} /></h1>
+			</div>
+			
+			<div class="row supporter-logos justify-content-center align-items-center">
+				<div class="col-md-3 col-sm-6 supporter-card">
+					<div class="supporter-logo">
+						<img src={support1.src}/>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6 supporter-card">
+					<div class="supporter-logo">
+						<img src={support2.src}/>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6 supporter-card">
+					<div class="supporter-logo">
+						<img src={support3.src}/>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6 supporter-card">
+					<div class="supporter-logo">
+						<img src={support4.src}/>
+					</div>
+				</div>
+				<div class="col-md-3 col-sm-6 supporter-card">
+					<div class="supporter-logo">
+						<img src={support5.src}/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 	</div>
 </Layout>
 
@@ -355,6 +401,56 @@ const team_spans = team_content
     font-weight: 500;
 }
 
+#supported-by {
+    background: linear-gradient(to right, #faece0, #ff9e9a);
+}
+
+.supporter-card {
+	width: auto !important;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.supporter-logos {
+	margin-top: 40px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 40px;
+}
+
+.supporter-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.logo-placeholder {
+    color: #999;
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: 500;
+    padding: 10px;
+}
+
+/* When you add actual images, use this instead of placeholder */
+.supporter-logo img {
+    transition: all 0.3s ease;
+	max-width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .supporter-card {
+        margin-bottom: 20px;
+    }
+
+}
+
 	@media screen and (max-width: 1400px) {
 		.approach-container {
 			transform: none !important;
@@ -436,7 +532,7 @@ const team_spans = team_content
 	import { animate, onScroll, stagger } from "../scripts/anime.esm.min";
 	document.addEventListener("astro:page-load", () => {
 		// Only run this code for the index page
-		if ((window.location.pathname !== "/greenleaf/") && (window.location.pathname !== "/greenleaf")) return;
+		if ((window.location.pathname !== "/") && (window.location.pathname !== "/")) return;
 		let mouseX = 0;
 		let mouseY = 0;
 		let targetX = 0;

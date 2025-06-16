@@ -1,5 +1,5 @@
 ---
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/global.css";
 import Nav from "../components/Nav.astro";
 import { ClientRouter } from "astro:transitions";
@@ -7,28 +7,86 @@ import { ClientRouter } from "astro:transitions";
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/greenleaf/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Greenleaf</title>
-		<ClientRouter />
-	</head>
-	<body>
-		<Nav transition:persist />
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <title>
+      Greenleaf - Next-Generation Crop Protection with Bacteriophages
+    </title>
+    <meta
+      name="description"
+      content="Greenleaf creates effective, non-toxic crop protectants using bacteriophages to ensure global food security through sustainable disease management for crops."
+    />
+    <meta
+      name="keywords"
+      content="bacteriophages, crop protection, sustainable agriculture, food security, plant disease management, biotechnology, green agriculture, crop health"
+    />
+    <meta name="author" content="Greenleaf" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://yourdomain.com/greenleaf/" />
+    <meta
+      property="og:title"
+      content="Greenleaf - Next-Generation Crop Protection with Bacteriophages"
+    />
+    <meta
+      property="og:description"
+      content="Revolutionary crop protectants using bacteriophages for effective, specific, and environmentally safe disease management."
+    />
+    <meta
+      property="og:image"
+      content="/banner.webm"
+    />
+    <meta property="og:site_name" content="Greenleaf" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://yourdomain.com/greenleaf/" />
+    <meta
+      property="twitter:title"
+      content="Greenleaf - Next-Generation Crop Protection with Bacteriophages"
+    />
+    <meta
+      property="twitter:description"
+      content="Revolutionary crop protectants using bacteriophages for effective, specific, and environmentally safe disease management."
+    />
+    <meta
+      property="twitter:image"
+      content="/banner.webm"
+    />
+
+    <!-- Additional SEO -->
+    <link rel="canonical" href="https://yourdomain.com/" />
+    <meta name="theme-color" content="#ff7e79" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <ClientRouter />
+  </head>
+  <body>
+    <Nav transition:persist />
+    <slot />
+  </body>
 </html>
 
 <style>
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-		position: relative;
-	}
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
 </style>
 
-<script>
-</script>
+<script></script>
