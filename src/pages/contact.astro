@@ -18,6 +18,12 @@ import Layout from "../layouts/Layout.astro";
 					</p>
 				</div>
 
+				<div class="row">
+					<p class="text-center mb-5">
+						For general inquiries, please email us at
+						<a href="mailto:founders@greenleaf.bio"
+							> <i class="fa fa-envelope" /> founders@greenleaf.bio</a>
+
 				<div class="form-container">
 					<!-- Form status messages -->
 					<div
@@ -248,7 +254,7 @@ import Layout from "../layouts/Layout.astro";
 				.catch((error) => {
 					// This will only trigger for network errors or JSON parsing failures
 					formError.textContent =
-						"Connection error. Please check your internet connection and try again.";
+						"Connection error. Please check your internet connection and try again or contact us directly at founders@greenleaf.bio";
 					formError.style.display = "block";
 					console.error("Network error:", error);
 
